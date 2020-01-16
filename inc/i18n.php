@@ -1,4 +1,28 @@
 <?php
+
+    if (!file_exists(__SHAFI_INC . '/vendor/autoload.php')) {
+
+        /** This is a fallback to be able to use SHAFI even if php-gettext is not installed */
+        if (! function_exists('__')) {
+            function __($txt, $domain = null) {
+                return $txt;
+            }
+        }
+    
+        if (! function_exists('_e')) {
+            function _e($txt, $domain = null) {
+                echo __($txt, $domain);
+            }
+        }
+    
+        if (! function_exists('_s')) {
+            function _s($txt, ...$args) {
+                return call_user_func_array('sprintf', array_merge([__($txt)], $args) );
+            }
+        }
+        return;
+    }
+
     require(__SHAFI_INC . '/vendor/autoload.php');
 
     use Gettext\Loader\PoLoader;
