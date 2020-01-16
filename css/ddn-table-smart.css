@@ -1,0 +1,53 @@
+table.ddn-table-smart {
+    table-layout: auto !important;
+}
+table.ddn-table-smart span.arrow {
+    padding-left: 5px;
+}
+table.ddn-table-smart span.title {
+    float: left;
+}
+table.ddn-table-smart th {
+    white-space: nowrap !important;
+    cursor: pointer;
+}
+table.ddn-table-smart td {
+    white-space: nowrap;
+}
+table.ddn-table-smart td > div {
+    white-space: normal;
+}
+input.ddn-table-filter {
+    width: 20% !important;
+    min-width: 100px;
+    float: right;
+    clear: both;
+    font-size: 70%;
+}
+div.ddn-table-pagination {
+    width: 100%;
+    text-align: center;
+}
+div.ddn-table-pagination:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+div.ddn-table-pagination label {
+    float: left;
+    display: flex;
+}
+div.ddn-table-pagination select {
+    margin-left: 0.5em;
+}
+div.ddn-table-pagination div.numbers {
+    margin-top: 0.5em;
+}
+div.ddn-table-pagination a.page-numbers {
+    text-decoration: none;
+    box-shadow: none;
+}
+div.ddn-table-pagination a.disabled {
+    pointer-events: none;
+    cursor: default;
+}

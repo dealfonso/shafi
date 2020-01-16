@@ -1,0 +1,154 @@
+.g-recaptcha {
+    display: inline-block;
+}
+.login-form {
+    text-align: center;
+    margin: 50px auto;
+}
+.input-group, .g-recaptcha, .container {
+    margin-top: 1em;                
+}
+.form-control, .btn {
+    border-radius: 10px;
+}
+.v-center {
+    margin-top: auto;
+    margin-bottom: auto;                
+}
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+div.toolbar {
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    text-align: right;
+    padding: 0.5em;
+    background: rgba(255,255,255,0.7);
+}
+body {
+    /* to pass the toolbar */
+    margin-top: 2em;
+}
+div.toolbar span {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+div.toolbar span.label {
+    font-weight: bold;
+}
+div.left {
+    float:left;
+}
+div.right {
+    float:right;
+}
+.toolbar a {
+    color: #000;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: none;
+}
+.debugbar {
+    display: none;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background: #fbb;
+    opacity: 1;
+    z-index: 2;
+}
+div.filedesc {
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    background: #eee;
+    text-align: center;
+    display: flex;
+    justify-content:space-between;
+    padding: 0.5em 1em;
+}
+div.filedesc span.label {
+    font-weight: bold;
+}
+div.filedesc ul {
+    padding: 0;
+    list-style-type: none;                
+    text-align: left;
+    margin: 0;
+}
+div.filedesc a {
+    color: #000;
+    text-decoration: none;
+}
+a.download {
+    font-size: 300%;
+}
+
+div.filedesc div {
+    /*height: 100%;*/
+    padding: 0.5em;
+}
+div.text-center table {
+    margin: 0 auto;
+}
+
+table td, table th {
+    padding: 0.5em 1em;
+}
+table tr {
+    padding: 1em 0em;
+}
+.openext {
+    padding-left: 0.5em;
+}
+.fa-times {
+    color: darkred !important;
+}
+a.control {
+    padding-right: 0.5em;
+}
+
+/** These are intended to use with font-awesome-animation */
+.animate-3 {
+    animation-iteration-count: 3 !important;
+}
+.animate-2 {
+    animation-iteration-count: 2 !important;
+}
+.animate-1 {
+    /* Try to delay starting animation for 5s (e.g.) */
+    animation-iteration-count: 1 !important;
+}
+
+@keyframes tada-wait {
+	0% {transform: scale(1)}
+	0.5%,1% {transform:scale(.9) rotate(-8deg);}
+	1.5%,2.5%,3.5% {transform:scale(1.3) rotate(8deg)}
+	2%,3% {transform:scale(1.3) rotate(-8deg)}
+	4%,5%,100% {transform:scale(1) rotate(0)}
+}
+
+.faa-tada-wait.animated,
+.faa-tada-wait.animated-hover:hover,
+.faa-parent.animated-hover:hover > .faa-tada-wait {
+	animation: tada-wait 30s linear infinite;
+}
+
+i.bigicon {
+    font-size: 500%;
+    padding-bottom: 0.1em;
+}
+
+h3 {
+    padding-top: 0.5em;
+}
+
+.inactive-progress-bar {
+    color: black; background: transparent;     
+}
+
+div.collapsible.closed div.content {
+    display: none;
+}

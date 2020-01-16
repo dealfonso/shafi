@@ -1,0 +1,71 @@
+/**
+    ALERTS (DDN_Notice)
+**/
+div.alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    text-align: center;
+}
+div.alert.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+div.alert.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+div.alert.autohide {
+    animation-iteration-count: 1;
+    animation: alert-success-hide 1s forwards 10s;
+    -moz-animation-iteration-count: 1;
+    -moz-animation: alert-success-hide 1s forwards 10s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation: alert-success-hide 1s forwards 10s;
+}
+
+@keyframes alert-success-hide  { 
+    0% { 
+        opacity: 1; 
+    } 
+    80% { 
+        opacity: 1; 
+    } 
+    100% { 
+        opacity: 0;
+        visibility: hidden;
+    }
+}    
+
+div.alert.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+div.alert.alert-info {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+}
+
+div.alert > .closebtn {
+    margin-left: 15px;
+    /* color: white; */
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+  
+  /* When moving the mouse over the close button */
+div.alert > .closebtn:hover {
+    color: white;
+}

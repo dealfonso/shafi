@@ -1,0 +1,675 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-01-16 15:59+0100\n"
+"PO-Revision-Date: 2020-01-16 15:59+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;_s\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: config.php:100
+msgid "failed to create database"
+msgstr "fallo al crear la base de datos"
+
+#: inc/file.php:11
+msgid "active"
+msgstr "activo"
+
+#: inc/file.php:11
+msgid "expired"
+msgstr "caducado"
+
+#: inc/file.php:11
+msgid "cancelled"
+msgstr "cancelado"
+
+#: inc/file.php:11
+msgid "grace period"
+msgstr "periodo de gracia"
+
+#: inc/file.php:11
+msgid "deleted"
+msgstr "Borrado"
+
+#: inc/file.php:175 inc/token.php:111
+msgid "Token has expired but the state could not be saved"
+msgstr "El token ha caducado pero su estado no se ha podido guardar"
+
+#: inc/ops.php:19
+msgid "Invalid value for seconds"
+msgstr "Valor de segundos no válido"
+
+#: inc/ops.php:30
+msgid "Invalid value for units"
+msgstr "Identificador de unidades no válido"
+
+#: inc/ops.php:36
+msgid "Invalid value for hours"
+msgstr "Valor de horas no válido"
+
+#: inc/ops.php:44
+msgid "Invalid value for hits"
+msgstr "Valor de usos no válido"
+
+#: inc/ops/admin-ops.php:19
+msgid "User is already logged in"
+msgstr "El usuario ya está autenticado"
+
+#: inc/ops/admin-ops.php:24 inc/ops/admin-ops.php:117
+msgid "User does not exist"
+msgstr "El usuario no existe"
+
+#: inc/ops/admin-ops.php:28 inc/ops/get.php:74
+msgid "Invalid password"
+msgstr "Clave incorrecta"
+
+#: inc/ops/admin-ops.php:49
+msgid "User is not authenticated"
+msgstr "El usuario no está autenticado"
+
+#: inc/ops/admin-ops.php:69
+msgid "No empty passwords are allowed"
+msgstr "No se permiten claves vacías"
+
+#: inc/ops/admin-ops.php:72 inc/ops/admin-ops.php:96 templates/userinfo.php:3
+#: templates/users.php:27
+msgid "Passwords do not match"
+msgstr "Las claves no coinciden"
+
+#: inc/ops/admin-ops.php:75
+msgid "Failed to update password"
+msgstr "Fallo al actualizar la clave"
+
+#: inc/ops/admin-ops.php:77
+msgid "Password successfully updated"
+msgstr "Clave actualizada correctamente"
+
+#: inc/ops/admin-ops.php:93
+msgid "User already exists"
+msgstr "El usuario ya existe"
+
+#: inc/ops/admin-ops.php:110
+msgid "Failed to create user"
+msgstr "Fallo al crear el usuario"
+
+#: inc/ops/admin-ops.php:112
+msgid "User has been successfully created"
+msgstr "El usuario se ha creado correctamente"
+
+#: inc/ops/admin-ops.php:121
+msgid "Failed to delete user"
+msgstr "Fallo al borrar el usuario"
+
+#: inc/ops/admin-ops.php:123
+#, php-format
+msgid "User %s successfully deleted"
+msgstr "Usuario %s borrado correctamente"
+
+#: inc/ops/delete-file.php:13 inc/ops/uploadfile.php:35
+msgid "Invalid file"
+msgstr "Fichero no válido"
+
+#: inc/ops/delete-file.php:22 inc/ops/edit.php:36
+#, php-format
+msgid "Some tokens (%d) could not be cancelled"
+msgstr "No se han podido cancelar algunos tokens (%d)"
+
+#: inc/ops/delete-file.php:25
+msgid "File could not be cancelled, but its token have been cancelled"
+msgstr ""
+"El fichero no se ha podido cancelar, pero sus tokens sí que se han cancelado"
+
+#: inc/ops/delete-file.php:28
+#, php-format
+msgid "File %s successfully cancelled"
+msgstr "Fichero %s cancelado correctamente"
+
+#: inc/ops/download.php:15
+msgid "File not found"
+msgstr "Fichero no encontrado"
+
+#: inc/ops/download.php:22
+msgid "File is not active"
+msgstr "El fichero no se encuentra activo"
+
+#: inc/ops/edit.php:17
+msgid "The file has been successfully activated"
+msgstr "El fichero se ha activado correctamente"
+
+#: inc/ops/edit.php:19
+msgid "The file could not be activated"
+msgstr "No se ha podido activar el fichero"
+
+#: inc/ops/edit.php:29
+msgid "No token to cancel"
+msgstr "No hay tokens para cancelar"
+
+#: inc/ops/edit.php:38
+msgid "Tokens successfully cancelled"
+msgstr "Los tokens han sido cancelados"
+
+#: inc/ops/edit.php:49 inc/ops/edit.php:74 inc/ops/uploadfile.php:64
+msgid "Infinite tokens are not permitted"
+msgstr "No se permiten tokens infinitos"
+
+#: inc/ops/edit.php:53 inc/ops/edit.php:104
+msgid "Failed to create token"
+msgstr "Fallo al crear el token"
+
+#: inc/ops/edit.php:69
+msgid "Invalid token"
+msgstr "Token no válido"
+
+#: inc/ops/edit.php:115
+msgid "Token not corresponds to the file"
+msgstr "El token no pertenece al fichero"
+
+#: inc/ops/edit.php:119
+msgid "Failed to cancel token"
+msgstr "Fallo al cancelar el token"
+
+#: inc/ops/get.php:25
+msgid "Token not found"
+msgstr "No se encuentra el token"
+
+#: inc/ops/get.php:40
+msgid "Token expired"
+msgstr "Token caducado"
+
+#: inc/ops/get.php:46
+msgid "Multiple active tokens found"
+msgstr "Se han encontrado varios tokens activos"
+
+#: inc/ops/get.php:56
+msgid "Missing file"
+msgstr "Fichero perdido"
+
+#: inc/ops/get.php:65
+msgid "File has been cancelled or has expired"
+msgstr "El fichero ha sido cancelado o ha caducado"
+
+#: inc/ops/uploadfile.php:29
+msgid "File has not been properly transmitted to the server"
+msgstr "El fichero no se ha enviado correctamente al servidor"
+
+#: inc/ops/uploadfile.php:32
+msgid "File size exceeds limits"
+msgstr "El tamaño sobrepasa los límites"
+
+#: inc/ops/uploadfile.php:41
+msgid "Failed to store file in the backend"
+msgstr "Fallo al guardar el fichero en el sistema de almacenamiento"
+
+#: inc/ops/uploadfile.php:65
+msgid "A default token has been created"
+msgstr "Se ha creado un token con valores por defecto"
+
+#: inc/ops/uploadfile.php:85
+msgid "Failed to obtain token parameters"
+msgstr "Fallo al obtener los parámetros para el token"
+
+#: inc/ops/uploadfile.php:92
+msgid "Failed to store the file"
+msgstr "Fallo al almacenar el fichero"
+
+#: inc/ops/uploadfile.php:101
+msgid "Could not reactivate the file"
+msgstr "No se ha podido reactivar el fichero"
+
+#: inc/ops/uploadfile.php:103
+msgid ""
+"File existed and has been reactivated. Please check the tokens that it may "
+"have associated."
+msgstr ""
+"El fichero existía y se ha reactivado. Por favor, compruebe los tokens que "
+"pudiera tener anteriormente asociados."
+
+#: inc/ops/uploadfile.php:112
+#, php-format
+msgid "File %s successfully stored"
+msgstr "Fichero %s guardado correctamente"
+
+#: inc/ops/uploadfile.php:115
+msgid "Failed to update file information in the database"
+msgstr "Fallo al actualizar la información del fichero en la base de datos"
+
+#: inc/ops/uploadfile.php:121
+msgid "Failed to create token, but the file is properly stored in the system"
+msgstr ""
+"Fallo al crear el token, pero el fichero sí que se ha guardado en el sistema"
+
+#: inc/ops/uploadfile.php:137
+msgid "The server failed to receive the file"
+msgstr "El servidor no ha podido recibir correctamente el fichero"
+
+#: inc/token.php:55
+msgid "Token could not be cancelled"
+msgstr "No se ha podido cancelar el token"
+
+#: index.php:127
+msgid "Manage users"
+msgstr "Gestionar usuarios"
+
+#: index.php:130
+msgid "Files from all users"
+msgstr "Todos los ficheros"
+
+#: index.php:134
+msgid "Files"
+msgstr "Ficheros"
+
+#: index.php:137
+msgid "User"
+msgstr "Usuario"
+
+#: index.php:140
+msgid "Log out"
+msgstr "Salir"
+
+#: index.php:144 templates/login.php:3 templates/login.php:7
+msgid "Log in"
+msgstr "Acceder"
+
+#: templates/edit.php:21 templates/edit.php:28
+msgid "Please confirm token cancellation"
+msgstr "Por favor, confirme la cancelación del token"
+
+#: templates/edit.php:22
+msgid "Please confirm that you want to cancel all tokens"
+msgstr "Por favor, confirme que quiere cancelar todos los tokens"
+
+#: templates/edit.php:29
+msgid "Please confirm that you want to delete token"
+msgstr "Por favor, confirme que quiere eliminar el token"
+
+#: templates/edit.php:35 templates/edit.php:55
+msgid "Create new token"
+msgstr "Crear nuevo token"
+
+#: templates/edit.php:38 templates/edit.php:70 templates/users.php:41
+msgid "Create"
+msgstr "Crear"
+
+#: templates/edit.php:42 templates/edit.php:43
+msgid "Renew token"
+msgstr "Renovar token"
+
+#: templates/edit.php:43
+msgid ""
+"These values are considered from now (they are not combined with the "
+"previous one)"
+msgstr ""
+"Los valores indicados son a partir de ahora (no se combinan con los "
+"anteriores)"
+
+#: templates/edit.php:45
+msgid "Renew"
+msgstr "Renovar"
+
+#: templates/edit.php:69 templates/part/modal-confirm.php:16
+#: templates/users.php:40
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/edit.php:83 templates/list.php:32
+msgid "Name"
+msgstr "Nombre"
+
+#: templates/edit.php:84
+msgid "Size"
+msgstr "Tamaño"
+
+#: templates/edit.php:85 templates/list.php:27
+msgid "Creation date"
+msgstr "Fecha de creación"
+
+#: templates/edit.php:86 templates/edit.php:133 templates/list.php:36
+msgid "Status"
+msgstr "Estado"
+
+#: templates/edit.php:87 templates/list.php:41
+msgid "Owner"
+msgstr "Propietario"
+
+#: templates/edit.php:98
+msgid "Tokens for the file"
+msgstr "Tokens para el fichero"
+
+#: templates/edit.php:122
+msgid "Validity"
+msgstr "Validez"
+
+#: templates/edit.php:129
+msgid "Max. Hits"
+msgstr "Max. Usos"
+
+#: templates/edit.php:136
+msgid "Hits"
+msgstr "Usos"
+
+#: templates/edit.php:166 templates/upload-file-legacy.php:15
+#: templates/upload-file.php:21
+msgid "Create token"
+msgstr "Crear Token"
+
+#: templates/edit.php:169
+msgid "Cancel all tokens"
+msgstr "Cancelar todos los tokens"
+
+#: templates/edit.php:172
+msgid "Cancel file"
+msgstr "Cancelar el fichero"
+
+#: templates/edit.php:180
+msgid "Activate file"
+msgstr "Activar el fichero"
+
+#: templates/error.php:4
+msgid "Oooooops!"
+msgstr "¡Oooooops!"
+
+#: templates/error.php:5
+msgid "We are sorry to inform that an error has occurred"
+msgstr "Lamentamos informarle de que ha ocurrido un error"
+
+#: templates/home.php:3
+msgid "Only registered users are allowed to use this platform."
+msgstr "Esta plataforma sólo puede ser utilizada por usuarios registrados."
+
+#: templates/home.php:3
+msgid "Please contact the administrator in case that you need to use it."
+msgstr ""
+"Por favor, contacte con el administrador en caso de que necesite utilizarla."
+
+#: templates/list.php:6
+msgid "Available files"
+msgstr "Ficheros disponibles"
+
+#: templates/login.php:5 templates/users.php:56
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: templates/login.php:6 templates/passwd.php:5
+msgid "Password"
+msgstr "Clave"
+
+#: templates/part/error-modal.php:6
+msgid "An error has occurred"
+msgstr "Ha ocurrido un error"
+
+#: templates/part/error-modal.php:13
+msgid "An error has occurred in the system."
+msgstr "Ha ocurrido un error en el sistema."
+
+#: templates/part/error-modal.php:13
+msgid "Please contact with the admins"
+msgstr "Por favor, contacte con los administradores"
+
+#: templates/part/error-modal.php:16
+msgid "Accept"
+msgstr "Aceptar"
+
+#: templates/part/modal-confirm.php:15
+msgid "Confirm"
+msgstr "Confirmar"
+
+#: templates/part/modal-confirm.php:36
+msgid "Please confirm file cancellation"
+msgstr "Por favor, confirme la cancelación del fichero"
+
+#: templates/part/modal-confirm.php:37
+msgid "Please confirm that you want to cancel file "
+msgstr "Por favor, confirme que desea cancelar el fichero "
+
+#: templates/part/modal-confirm.php:37
+msgid "This action may imply file deletion."
+msgstr "Esta acción puede implicar el borrado del fichero."
+
+#: templates/part/redeem-token.php:6
+msgid "Redeem a token"
+msgstr "Utilizar el token"
+
+#: templates/part/redeem-token.php:13
+msgid "Token to redeem"
+msgstr "Token a utilizar"
+
+#: templates/part/redeem-token.php:17
+msgid "Redeem"
+msgstr "Canjear"
+
+#: templates/part/token-form.php:5
+msgid "Expire in"
+msgstr "Caducar en"
+
+#: templates/part/token-form.php:9
+msgid "hour"
+msgstr "hora"
+
+#: templates/part/token-form.php:10 templates/part/token-form.php:11
+#: templates/part/token-form.php:12 templates/part/token-form.php:13
+#: templates/part/token-form.php:14
+msgid "hours"
+msgstr "horas"
+
+#: templates/part/token-form.php:14
+msgid "day"
+msgstr "día"
+
+#: templates/part/token-form.php:15 templates/part/token-form.php:16
+#: templates/part/token-form.php:18 templates/part/token-form.php:19
+#: templates/part/token-form.php:20 templates/part/token-form.php:36
+#: templates/part/token-form.php:42
+msgid "days"
+msgstr "días"
+
+#: templates/part/token-form.php:17
+msgid "week"
+msgstr "semana"
+
+#: templates/part/token-form.php:19
+msgid "month"
+msgstr "semanas"
+
+#: templates/part/token-form.php:20 templates/part/token-form.php:21
+#: templates/part/token-form.php:39
+msgid "months"
+msgstr "meses"
+
+#: templates/part/token-form.php:22
+msgid "year"
+msgstr "año"
+
+#: templates/part/token-form.php:23
+msgid "custom period"
+msgstr "periodo definido por el usuario"
+
+#: templates/part/token-form.php:33
+msgid "minutes"
+msgstr "minutos"
+
+#: templates/part/token-form.php:50
+msgid "Expire after"
+msgstr "Caducar tras"
+
+#: templates/part/token-form.php:55
+msgid "hits"
+msgstr "usos"
+
+#: templates/part/token-form.php:62
+#: templates/upload-file-anonymous-legacy.php:19
+#: templates/upload-file-anonymous.php:26
+msgid "Set password"
+msgstr "Establecer clave"
+
+#: templates/passwd.php:8
+msgid "Download"
+msgstr "Descargar"
+
+#: templates/unauthorized.php:2
+msgid "Not authorized"
+msgstr "No autorizado"
+
+#: templates/upload-file-anonymous-legacy.php:8
+#: templates/upload-file-anonymous.php:9 templates/upload-file-legacy.php:10
+#: templates/upload-file.php:10
+msgid "Select file"
+msgstr "Seleccionar fichero"
+
+#: templates/upload-file-anonymous-legacy.php:11
+#: templates/upload-file-anonymous.php:17
+msgid "A new link will be created. It will expire in a few days."
+msgstr "Se creará un nuevo enlace que caducará en pocos días."
+
+#: templates/upload-file-anonymous-legacy.php:13
+#: templates/upload-file-anonymous.php:20 templates/upload-file-legacy.php:13
+#: templates/upload-file.php:18
+msgid "simple"
+msgstr "simple"
+
+#: templates/upload-file-anonymous-legacy.php:13
+#: templates/upload-file-anonymous.php:20 templates/upload-file-legacy.php:13
+#: templates/upload-file.php:18
+msgid "advanced"
+msgstr "avanzado"
+
+#: templates/upload-file-anonymous-legacy.php:28
+msgid "share"
+msgstr "compartir"
+
+#: templates/upload-file-anonymous-legacy.php:40
+#: templates/upload-file-anonymous.php:52 templates/upload-file-legacy.php:35
+#: templates/upload-file.php:50
+msgid "Here you have a link to your file"
+msgstr "Aquí tiene el enlace al fichero"
+
+#: templates/upload-file-anonymous-legacy.php:42
+#: templates/upload-file-anonymous.php:54 templates/upload-file-legacy.php:37
+#: templates/upload-file.php:52
+#, php-format
+msgid "It will expire on %s"
+msgstr "Caducará el %s"
+
+#: templates/upload-file-anonymous-legacy.php:43
+#: templates/upload-file-anonymous.php:55 templates/upload-file-legacy.php:38
+#: templates/upload-file.php:53
+#, php-format
+msgid " or in %d hits"
+msgstr " o en %d usos"
+
+#: templates/upload-file-anonymous-legacy.php:46
+#: templates/upload-file-anonymous.php:58 templates/upload-file-legacy.php:41
+#: templates/upload-file.php:56
+#, php-format
+msgid "It will expire in %d hits"
+msgstr "Caducará en %d usos"
+
+#: templates/upload-file-anonymous-legacy.php:47
+#: templates/upload-file-anonymous.php:59 templates/upload-file-legacy.php:42
+#: templates/upload-file.php:57
+msgid "Thank you for using SHAFI."
+msgstr "Gracias por usar SHAFI."
+
+#: templates/upload-file-anonymous-legacy.php:52
+#: templates/upload-file-anonymous.php:64 templates/upload-file-legacy.php:49
+#: templates/upload-file.php:64
+msgid "copy link"
+msgstr "copiar enlace"
+
+#: templates/upload-file-anonymous.php:7 templates/upload-file.php:8
+msgid "Filename"
+msgstr "Nombre del fichero"
+
+#: templates/upload-file-legacy.php:16 templates/upload-file.php:22
+msgid "A default token will be created if these values are not defined"
+msgstr ""
+"Si no indica unos valores de caducidad, se creará un token con valores por "
+"defecto"
+
+#: templates/upload-file-legacy.php:23 templates/upload-file.php:35
+msgid "Share"
+msgstr "Compartir"
+
+#: templates/upload-file-legacy.php:52 templates/upload-file.php:67
+msgid "edit file"
+msgstr "editar el fichero"
+
+#: templates/upload-file.php:39
+msgid "i have a download token"
+msgstr "tengo un token de descarga"
+
+#: templates/userinfo.php:2
+msgid "Change password"
+msgstr "Cambiar clave"
+
+#: templates/userinfo.php:4 templates/users.php:30
+msgid "New password"
+msgstr "Nueva clave"
+
+#: templates/userinfo.php:5 templates/users.php:31
+msgid "Confirm password"
+msgstr "Confirmar clave"
+
+#: templates/userinfo.php:6
+msgid "Change"
+msgstr "Cambiar"
+
+#: templates/users.php:7
+msgid "Please confirm user deletion"
+msgstr "Por favor, confirme el borrado del usuario"
+
+#: templates/users.php:8
+msgid "Please confirm that you want to delete user "
+msgstr "Por favor, confirme que desea eliminar el usuario "
+
+#: templates/users.php:22 templates/users.php:82
+msgid "Create user"
+msgstr "Crear usuario"
+
+#: templates/users.php:29
+msgid "User name"
+msgstr "Nombre de usuario"
+
+#: templates/users.php:35
+msgid "Is admin"
+msgstr "Es administrador"
+
+#: templates/users.php:51
+msgid "Users"
+msgstr "Usuarios"
+
+#: templates/users.php:58
+msgid "Permisions"
+msgstr "Permisos"
+
+#~ msgid "File has expired"
+#~ msgstr "El fichero ha caducado"
+
+#~ msgid "File has been cancelled"
+#~ msgstr "El fichero ha sido cancelado"
+
+#~ msgid "No"
+#~ msgstr "No"
+
+#~ msgid "Yes"
+#~ msgstr "Si"
+
+#, php-format
+#~ msgid ""
+#~ "Here you have a link to your file. It will expire on %s. Thank you for "
+#~ "using SHAFI."
+#~ msgstr ""
+#~ "Aquí tiene el enlace a su fichero. Caducará el %s. Gracias por usar SHAFI."
+
+#~ msgid "Confirm user deletion"
+#~ msgstr "Confirmar borrado de usuario"
+
+#~ msgid "Ficheros"
+#~ msgstr "Files"
