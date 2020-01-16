@@ -1,0 +1,11 @@
+{
+    "name": "damadenacar/shafi",
+    "description": "ShaFi (Share Files)",    
+    "require": {
+        "gettext/translator": "^1.0",
+        "gettext/gettext": "^5.2"
+    },
+    "config": {
+        "vendor-dir": "inc/vendor"
+    }    
+}
