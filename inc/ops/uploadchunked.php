@@ -111,3 +111,24 @@ class SHAFI_Op_UploadChunked extends SHAFI_Op {
         die();
     }
 }
+
+trait SHAFI_Upload_Chunked_Trait {
+    protected function _get_file_struct($id) {
+        if (!keys_in_array(['resumableIdentifier', 'resumableTotalChunks', 'resumableTotalSize', 'resumableFilename'], $_POST)) {
+            return $this->add_error_message(__("Incomplete request"));
+        }
+
+        $uploaded_filename = SHAFI_Op_UploadChunked::get_filename($_POST['resumableIdentifier'], $_POST['resumableTotalChunks']);
+        if (!file_exists($uploaded_filename)) 
+            return $this->add_error_message(__("The server failed to receive the file"));
+
+        $_FILES[$id] = array(
+            'size' => filesize($uploaded_filename),
+            'error' => 0,
+            'tmp_name' => $uploaded_filename,
+            'name' => $_POST['resumableFilename'],
+            'type' => mime_content_type($uploaded_filename)
+        );
+        return $_FILES[$id];
+    }
+}

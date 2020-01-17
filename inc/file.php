@@ -8,7 +8,12 @@
     require_once(__SHAFI_INC . 'storage.php');
 
     define('__STATE', [
-        'a' => __('active'), 'e' => __('expired'), 'c' => __('cancelled'), 'g' => __('grace period'), 'd' => __('deleted')
+        'a' => __('active'),        // The file is active and can be downloaded, added tokens, etc.
+        'g' => __('grace period'),  // This is the same case than 'a', except that will be deleted soon because it has no active tokens
+        'p' => __('processing'),    // This state is near 'a', but the file cannot be downloaded. It is for cases in which the file needs to be zipped or uploaded to other backend
+        'e' => __('expired'), 
+        'c' => __('cancelled'), 
+        'd' => __('deleted')        // In this state the file cannot be used... it is the same as if the file did not exist
     ]);
         
     class SHAFile extends SCPM_DBObject {
@@ -30,7 +35,7 @@
         protected $expired = null;
         protected $name = null;
         protected $path = null;
-        protected $state = 'a';
+        protected $state = 'p';
 
         public function __construct($id = null) {
             parent::__construct($id);
@@ -54,7 +59,7 @@
         }
 
         public function is_active() {
-            return in_array($this->state, ['a', 'g']);
+            return in_array($this->state, ['a', 'g', 'p']);
         }
 
         public function create_token($exp_seconds, $exp_hits, $passwd) {
@@ -110,6 +115,7 @@
             switch ($this->state) {
                 case 'a':
                 case 'g':
+                case 'p':
                     $this->expired = null;
                     break;
 
@@ -125,6 +131,22 @@
             return true;
         }
 
+        protected function _still_processing($autosave = false) {
+            // At this moment there is no process... in case that there is a process, we'll need to check if the process has finished 
+            if ($this->state == 'p') {
+                $this->state = 'a';
+                if ($autosave)
+                    $this->save_i(['expired', 'state']);
+            }
+            return false;
+        }
+
+        public function is_processing() {
+            if ($this->_still_processing(true)) 
+                return true;
+            return false;
+        }
+
         public function update_state($autosave = false) {
             // 'd' is a terminal state; there is no operation (except force_state) that may change the state
             if ($this->state == 'd')
@@ -132,6 +154,9 @@
 
             $prev_state = $this->state;
             $now = new Datetime();
+
+            // If the file is still processing, 
+            if ($this->_still_processing($autosave)) return false;
 
             if ($this->state == 'a') {
                 $tokens = $this->get_active_tokens();
@@ -184,13 +209,14 @@
         public function get_active_tokens($filter = array()) {
             if (isset($filter['state'])) {
                 if (is_array($filter['state'])) {
+                    array_push($filter['state'], 'p');
                     array_push($filter['state'], 'a');
                     array_push($filter['state'], 'g');
                 } else {
-                    $filter['state'] = [ $filter['state'], 'a', 'g' ];
+                    $filter['state'] = [ $filter['state'], 'a', 'g', 'p' ];
                 }
             } else 
-                $filter['state'] = [ 'a', 'g' ];
+                $filter['state'] = [ 'a', 'g', 'p' ];
             return $this->get_tokens($filter);
         }
 

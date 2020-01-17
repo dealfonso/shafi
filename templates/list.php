@@ -13,6 +13,7 @@
             $files = SHAFile::search(['owner' => $current_user->get_username(), '!state' => 'd' ],
                 0, 0, false, 'AND', 'time');
         }
+
         $fields = array(
             "id" => [
                 'function' => function ($o) { 
@@ -34,7 +35,7 @@
             ],
             "estado" => array (
                 'title' => __('Status'), 
-                'function' => function($o) { return __STATE[$o->get_field('state')]; }, 
+                'function' => function($o) { /* we need to force the change of the state if it was processing */ $o->is_processing(); return __STATE[$o->get_field('state')]; }, 
             )
         );
         if ($show_all_users) {
