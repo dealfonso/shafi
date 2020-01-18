@@ -18,7 +18,7 @@ class SHAFI_Op_UploadChunked extends SHAFI_Op {
         $chunk_n = $a['resumableChunkNumber'];
         $chunk_total = $a['resumableTotalChunks'];
 
-        $folder = __PARTIAL_UPLOADS_FOLDER . "/" . sanitize_text($current_user->get_username()) . "/" . md5("$chunk_total-$file_id");
+        $folder = __PARTIAL_UPLOADS_FOLDER . "/" . sanitize_text($current_user->get_username()) . "/" . session_id() . "/" . md5("$chunk_total-$file_id");
         $destfile = "$folder/chunk-$chunk_n.part";
         return $destfile;
     }
@@ -26,7 +26,7 @@ class SHAFI_Op_UploadChunked extends SHAFI_Op {
     public static function get_filename($file_id, $chunk_total) {
         global $current_user;
 
-        $folder = __PARTIAL_UPLOADS_FOLDER . "/" . sanitize_text($current_user->get_username()) . "/" . md5("$chunk_total-$file_id");
+        $folder = __PARTIAL_UPLOADS_FOLDER . "/" . sanitize_text($current_user->get_username()) . "/" . session_id() . "/" . md5("$chunk_total-$file_id");
         $destfile = "$folder/file";
         return $destfile;
     }
