@@ -7,7 +7,7 @@ if ($handler->token_created === null) {
     <div class="input-group">
         <input type="text" id="filename" disabled class="form-control" placeholder="<?php _e('Filename') ?>">
         <div class="input-group-append">
-            <button id="resumable-select-file" class="btn btn-outline-secondary" type="button"><?php _e('Select file') ?></button>
+            <button id="resumable-select-file" resumable-url="<?php echo __UPLOAD_URL ?>" resumable-legacy-url="<?php echo __LEGACY_UPLOAD_URL ?>" class="btn btn-outline-secondary" type="button"><?php _e('Select file') ?></button>
         </div>
     </div>
     <p>
@@ -17,7 +17,7 @@ if ($handler->token_created === null) {
     </p>
     <div class="collapsible closed" opened-text='<?php _e('simple') ?> <i class="fas fa-angle-up"></i>' closed-text='<?php _e('advanced') ?> <i class="fas fa-angle-down"></i>' >
         <div class="content">
-            <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], '/'); ?>" method="POST">
+            <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], get_root_url()); ?>" method="POST">
                 <h3><?php _e('Create token') ?></h3>
                 <p class="small">(*) <?php _e('A default token will be created if these values are not defined') ?></p>
                 <?php
@@ -42,7 +42,7 @@ if ($handler->token_created === null) {
 <?php
 } else {
     $oid = $handler->token_created->get_field('oid');
-    $link = __SERVER_NAME . __ROOT_FOLDER . $oid;
+    $link = rtrim(__SERVER_NAME, '/') . get_root_url() . $oid;
 
     $s=$handler->token_created->get_field('exp_secs'); $t=clone $handler->token_created->get_field('time'); $exp_date = $s===null?null:SCPM_datetime_to_string($t->add(new DateInterval('PT' . $s . 'S')));
     $h=$handler->token_created->get_field('exp_hits');
@@ -64,7 +64,7 @@ if ($handler->token_created === null) {
             <a class="clipboard" href="#" data-clipboard-text="<?php echo $link; ?>"><i class="bigicon far fa-copy"></i><br><?php _e('copy link') ?></a>
         </div>
         <div class="col-md-3 v-center text-left">
-            <a href="<?php echo add_query_var(['op' => 'edit', 'id' => $handler->token_created->get_field('fileid')], '/') ?>"><i class="bigicon far fa-edit"></i><br><?php _e('edit file') ?></a>
+            <a href="<?php echo add_query_var(['op' => 'edit', 'id' => $handler->token_created->get_field('fileid')], get_root_url()) ?>"><i class="bigicon far fa-edit"></i><br><?php _e('edit file') ?></a>
         </div>
     </div>
 </div>

@@ -27,7 +27,7 @@ class SHAFI_Op_DeleteFile extends SHAFI_Op_File {
         global $pagecomm;
         $pagecomm->add_message('success', _s('File %s successfully cancelled', htmlspecialchars($this->file->get_field('name'))));
 
-        header("Location: " . add_query_var(['op' => 'edit', 'id' => $this->file->get_id()], '/'), true, 301);        
+        header("Location: " . add_query_var(['op' => 'edit', 'id' => $this->file->get_id()], get_root_url()), true, 301);        
         die();
     }
 }

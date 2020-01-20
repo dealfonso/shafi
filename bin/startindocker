@@ -1,0 +1,51 @@
+#!/bin/bash
+chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+chown -R www-data:www-data /var/www/html/shafi
+service mysql start
+mysql -u root <<EOT
+create database shafi;
+create user shafi@'localhost' identified by 'a-secret-password';
+grant all privileges on shafi.* to 'shafi'@'localhost';
+EOT
+cat > /var/www/html/shafi/config.php <<\EOT
+<?php
+$db_servername='localhost:3306';
+$db_database='shafi';
+$db_username='shafi';
+$db_password='a-secret-password';
+define('__STORAGE_BASE_FOLDER', '/var/www/html/shafi/uploads');
+define('__SERVER_NAME', 'http://localhost:10080');
+define('__ROOT_URL', '/shafi/');
+EOT
+php <<\EOT
+<?php
+define('__SHAFI_FOLDER', '/var/www/html/shafi/');
+define('__SHAFI_INC', __SHAFI_FOLDER . 'inc/');
+require_once(__SHAFI_FOLDER . 'defaultconfig.php');
+require_once(__SHAFI_INC . 'dbcreation.php');
+create_db();
+create_first_user('shafi', '123');
+?>
+EOT
+cat > /var/www/html/shafi/.htaccess <<\EOT
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /shafi/
+RewriteRule ^/index\.php$ - [L]
+RewriteRule ^/favicon\.ico$ - [L]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?f=$1 [L,QSA]
+</IfModule>
+EOT
+cat > /etc/apache2/conf-available/shafi.conf <<\EOT
+<Directory /var/www/html/shafi>
+   AllowOverride All
+</Directory>
+EOT
+a2enconf shafi
+a2enmod rewrite
+service apache2 start
+bash

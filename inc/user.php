@@ -3,6 +3,8 @@ if ( ! defined( '__SHAFI_FOLDER' ) ) {
     exit; // Exit if accessed directly
 }
 
+require_once(__SHAFI_INC . 'dbobject.php');
+
 class SHAFI_User extends Object_ROProps {
     protected $username = "anonymous";
     protected $authorized = false;
@@ -80,7 +82,7 @@ class SHAUser extends SCPM_DBObject {
     }        
 }
 
-if ($_SESSION['loggedin']) {
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
     $current_user = SHAUser::search([ 'username' => $_SESSION['username']]);
     if (sizeof($current_user) !== 1)
         $current_user = new SHAUser();        

@@ -22,7 +22,7 @@ class DDN_Notice {
                             break;
         }
 
-        $result .= "<div class='alert $class'>";
+        $result = "<div class='alert $class'>";
         if ($this->dismissible)
             $result .= "<span class='closebtn' onclick='this.parentElement.style.display=\"none\";'>&times;</span>";
         $result .= "$this->message</div>";

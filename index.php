@@ -7,7 +7,7 @@
 
     require_once(__SHAFI_INC . 'i18n.php');
     require_once(__SHAFI_INC . 'debug.php');
-    require_once(__SHAFI_FOLDER . 'config.php');
+    require_once(__SHAFI_FOLDER . 'defaultconfig.php');
     require_once(__SHAFI_INC . 'notice.php');
     require_once(__SHAFI_INC . 'roprops.php');
     require_once(__SHAFI_INC . 'helpers.php');
@@ -22,8 +22,8 @@
     // TODO:
     // - enable mail sending of links
 
-    $op = $_GET['op'];
-    $token = $_GET['f'];
+    $op = isset($_GET['op'])?$_GET['op']:'';
+    $token = isset($_GET['f'])?$_GET['f']:'';
 
     // First define the set of permissions
     $acl_manager->add_perm_acl('login', '!l');
@@ -101,46 +101,46 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.min.css">
-        <link rel="stylesheet" href="/css/notice.css">
-        <link rel="stylesheet" href="/css/ddn-table-smart.css">
-        <link rel="stylesheet" href="/css/shafi.css">
+        <link rel="stylesheet" href="<?php echo get_root_url() ?>css/notice.css">
+        <link rel="stylesheet" href="<?php echo get_root_url() ?>css/ddn-table-smart.css">
+        <link rel="stylesheet" href="<?php echo get_root_url() ?>css/shafi.css">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
-        <script src="/js/notice.js"></script>
-        <script src="/js/ddn-table-smart.js"></script>
-        <script src="/js/collapsible.js"></script>
-        <script src="/js/resumable.js"></script>
-        <script src="/js/resumable-link.js"></script>
-        <script src="/js/shafi.js"></script>
+        <script src="<?php echo get_root_url() ?>js/notice.js"></script>
+        <script src="<?php echo get_root_url() ?>js/ddn-table-smart.js"></script>
+        <script src="<?php echo get_root_url() ?>js/collapsible.js"></script>
+        <script src="<?php echo get_root_url() ?>js/resumable.js"></script>
+        <script src="<?php echo get_root_url() ?>js/resumable-link.js"></script>
+        <script src="<?php echo get_root_url() ?>js/shafi.js"></script>
     </head>
     <body>	
         <div class="debugbar">
             <?php echo $DEBUG; ?>
         </div>
         <div class="toolbar">
-            <div class="left"><a href="/"><i class="fas fa-home"></i><span class="label">ShaFi</span></a></div>
+            <div class="left"><a href="<?php echo get_root_url() ?>"><i class="fas fa-home"></i><span class="label">ShaFi</span></a></div>
             <div class="right">
                 <?php if ($current_user->is_logged_in()) { ?>
                     <?php if ($current_user->is_admin()) { ?>
-                        <a href="<?php echo add_query_var(['op' => 'users', 'id' => null], '/admin'); ?>">
+                        <a href="<?php echo add_query_var(['op' => 'users', 'id' => null], __ADMIN_URL); ?>">
                         <i class="fas fa-users-cog"></i><span><?php _e('Manage users') ?></span>
                         </a> 
-                        <a href="<?php echo add_query_var(['op' => 'listall', 'id' => null], '/admin'); ?>">
+                        <a href="<?php echo add_query_var(['op' => 'listall', 'id' => null], __ADMIN_URL); ?>">
                         <i class="fas fa-archive"></i><span><?php _e('Files from all users') ?></span>
                         </a> 
                     <?php } ?>
-                <a href="<?php echo add_query_var(['op' => 'list', 'id' => null], '/admin'); ?>">
+                <a href="<?php echo add_query_var(['op' => 'list', 'id' => null], __ADMIN_URL); ?>">
                     <i class="fas fa-list"></i><span><?php _e('Files') ?></span>
                 </a> 
-                <a href="<?php echo add_query_var(['op' => null, 'id' => null], '/admin'); ?>">
+                <a href="<?php echo add_query_var(['op' => null, 'id' => null], __ADMIN_URL); ?>">
                     <i class="fas fa-user"></i><span class="label"><?php _e('User') ?>: </span><?php echo $current_user->get_username() ?>
                 </a>
-                <a href="<?php echo add_query_var(['op' => 'logout', 'id' => null], '/admin'); ?>">
+                <a href="<?php echo add_query_var(['op' => 'logout', 'id' => null], __ADMIN_URL); ?>">
                     <span><?php _e('Log out') ?></span><i class="fas fa-sign-out-alt"></i>
                 </a>
                 <?php } else {?>
-                    <a href="<?php echo add_query_var(['op' => 'login', 'id' => null], '/admin'); ?>">
+                    <a href="<?php echo add_query_var(['op' => 'login', 'id' => null], __ADMIN_URL); ?>">
                     <i class="fas fa-user-slash"></i><span><?php _e('Log in') ?></span>
                 </a>
                 <?php } ?>

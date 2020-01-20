@@ -1,9 +1,10 @@
 <?php include_once('templates/part/error-modal.php'); ?>
+<?php include_once('templates/part/redeem-token.php'); ?>
 <?php
 if ($handler->token_created === null) {
 ?>
 <div class="col-md-6 offset-md-3 v-center text-center">
-    <form action="<?php echo add_query_var(['op' => null ], '/up'); ?>" method="POST" enctype="multipart/form-data">
+    <form action="<?php echo add_query_var(['op' => null ], __LEGACY_UPLOAD_URL); ?>" method="POST" enctype="multipart/form-data">
         <div class="input-group">
             <div class="custom-file">
                 <input required="true" type="file" class="custom-file-input" id="fichero" name="fichero">
@@ -22,12 +23,15 @@ if ($handler->token_created === null) {
         <div class="container">
             <button type="submit" class="btn btn-primary btn-lg" id="compartir" name="compartir"><?php _e('Share') ?></button>
         </div>
+        <div class="container small">
+            <a href="javascript:showmodal_redeem();"><?php _e('i have a download token'); ?></a>
+        </div>
     </form>             
 </div>
 <?php
 } else {
     $oid = $handler->token_created->get_field('oid');
-    $link = __SERVER_NAME . __ROOT_FOLDER . $oid;
+    $link = rtrim(__SERVER_NAME, '/') . get_root_url() . $oid;
 
     $s=$handler->token_created->get_field('exp_secs'); $t=clone $handler->token_created->get_field('time'); $exp_date = $s===null?null:SCPM_datetime_to_string($t->add(new DateInterval('PT' . $s . 'S')));
     $h=$handler->token_created->get_field('exp_hits');
@@ -49,7 +53,7 @@ if ($handler->token_created === null) {
             <a class="clipboard" href="#" data-clipboard-text="<?php echo $link; ?>"><i class="bigicon far fa-copy"></i><br><?php _e('copy link') ?></a>
         </div>
         <div class="col-md-3 v-center text-left">
-            <a href="<?php echo add_query_var(['op' => 'edit', 'id' => $handler->token_created->get_field('fileid')], '/') ?>"><i class="bigicon far fa-edit"></i><br><?php _e('edit file') ?></a>
+            <a href="<?php echo add_query_var(['op' => 'edit', 'id' => $handler->token_created->get_field('fileid')], get_root_url()) ?>"><i class="bigicon far fa-edit"></i><br><?php _e('edit file') ?></a>
         </div>
     </div>
 </div>

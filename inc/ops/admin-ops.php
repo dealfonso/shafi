@@ -30,7 +30,7 @@ class SHAFI_Op_Login extends SHAFI_Op {
             session_regenerate_id();
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $_POST['username'];
-            header(sprintf('Location: %s', add_query_var(['op' => null, 'id' => null], '/')));
+            header(sprintf('Location: %s', add_query_var(['op' => null, 'id' => null], get_root_url())));
             die();            
         }
         return false;
@@ -51,7 +51,7 @@ class SHAFI_Op_Logout extends SHAFI_Op {
         session_destroy();
         $_SESSION['loggedin'] = false;
         $_SESSION['username'] = null;
-        header(sprintf('Location: %s', add_query_var(['op' => null, 'id' => null], '/')));
+        header(sprintf('Location: %s', add_query_var(['op' => null, 'id' => null], get_root_url())));
         die();            
     }
 }
