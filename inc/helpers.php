@@ -9,6 +9,10 @@
         }
     }
 
+    function get_root_url() {
+        return rtrim(__ROOT_URL, '/') . '/';
+    }
+
     function sanitize_text($text) {
         return preg_replace('/[^a-z0-9]+/', '-', strtolower( $text ));
     }
@@ -71,6 +75,9 @@
         if ($uri === null) $uri = $_SERVER['REQUEST_URI'];
 
         $uri_parts = parse_url($uri);
+        if (!isset($uri_parts['query'])) 
+            $uri_parts['query'] = "";
+
         parse_str($uri_parts['query'], $query_vars);
 
         // $values has precedence over $query_vars
@@ -80,7 +87,7 @@
         if (isset($uri_parts['scheme'])) $result .= $uri_parts['scheme']. "://";
         if (isset($uri_parts['user'])) $result .= $uri_parts['user'];
         if (isset($uri_parts['pass'])) $result .= ':' . $uri_parts['pass'];
-        if (isset($uri_parts['user']) || defined($uri_parts['pass'])) $result .= '@';
+        if (isset($uri_parts['user']) || isset($uri_parts['pass'])) $result .= '@';
         if (isset($uri_parts['host'])) $result .= $uri_parts['host'];
         if (isset($uri_parts['port'])) $result .= ':' . $uri_parts['port'];
         if (isset($uri_parts['path'])) $result .= $uri_parts['path'];

@@ -76,7 +76,7 @@ class DDN_List {
         $i_object = 0;
 
         $tableid = uniqid("table");
-        $retval .= "<table id='$tableid' class='ddn-table-smart $classes' $extrahtml>";
+        $retval = "<table id='$tableid' class='ddn-table-smart $classes' $extrahtml>";
         /*
         if ($this->_enable_search) {
             $tableid = uniqid("table");

@@ -162,6 +162,7 @@ class SCPM_DBObject {
         $db_tablename = self::get_db_tablename();
 
         //
+        $orderby_cond = '';
         if ($orderby !== null) {
             if (is_array($orderby))
                 $orderby_cond = ' ORDER BY ' . implode(',', $orderby);
@@ -180,7 +181,7 @@ class SCPM_DBObject {
 
             // Create the object using the id just in case the other functions do not set the id
             $id = null;
-            if (isset($dbobj->id)) $id = $dbobj_id;
+            if (isset($dbobj->id)) $id = $dbobj->id;
 
             // Instantiate the object from the current class
             $new_obj = new $class($id);

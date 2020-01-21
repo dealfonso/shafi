@@ -1,5 +1,8 @@
 <?php
 
+
+require_once(__SHAFI_INC . 'roprops.php');
+
 /**
  * This is a simple class that wraps database access for some functions. It tries to be compatible with wordpress wpdb class
  *   in the functions that it implements
@@ -27,22 +30,19 @@ class DB extends Object_ROProps {
         $this->conn = new mysqli($db_servername, $db_username, $db_password, $db_database);    
         $this->is_connected = ! $this->conn->connect_error;
         $this->error = $this->conn->connect_error;
-        $this->db_tables_prefix = $db_tables_prefix;
+        $this->prefix = $db_tables_prefix;
     }
 
     public function is_connected() { return $this->is_connected; }  
 
     public function query($query) {
-        global $DEBUG;
         if ($this->is_connected()) {
-            $DEBUG->debug($query);
             $result = $this->conn->query($query);
             $this->error = null;
             if ($result === false)
                 $this->error = $this->conn->error;
             return $result;
         }
-        $DEBUG->error("not connected to the db");
         return false;
     }
 

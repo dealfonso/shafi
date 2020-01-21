@@ -18,7 +18,7 @@
             "id" => [
                 'function' => function ($o) { 
                     if ($o->is_active())
-                        return '<a href="' . add_query_var(['op' => 'edit', 'id' => $o->get_id() ], '/') . '">' . $o->get_id() . '<i class="openext far fa-edit"></i></a>';
+                        return '<a href="' . add_query_var(['op' => 'edit', 'id' => $o->get_id() ], get_root_url()) . '">' . $o->get_id() . '<i class="openext far fa-edit"></i></a>';
                     else
                         return $o->get_id();
                 },
@@ -47,7 +47,7 @@
                     $id = $o->get_id();
 
                     if ($o->is_active())
-                        return '<a href="javascript:showmodal_cancelfile(\'' . htmlspecialchars($o->get_field('name')) . '\', \'' . $id .'\', \'' . add_query_var(['op' => 'del', 'id' => $id ], '/admin') . '\')"><i class="fas fa-times"></i></a>';
+                        return '<a href="javascript:showmodal_cancelfile(\'' . htmlspecialchars($o->get_field('name')) . '\', \'' . $id .'\', \'' . add_query_var(['op' => 'del', 'id' => $id ], __ADMIN_URL) . '\')"><i class="fas fa-times"></i></a>';
                 }                            
                 )
         );

@@ -1,4 +1,5 @@
 <?php include_once('templates/part/error-modal.php'); ?>
+<?php include_once('templates/part/redeem-token.php'); ?>
 <?php
 if ($handler->token_created === null) {
 ?>
@@ -6,7 +7,7 @@ if ($handler->token_created === null) {
         <div class="input-group">
             <input type="text" id="filename" disabled class="form-control" placeholder="<?php _e('Filename') ?>">
             <div class="input-group-append">
-                <button id="resumable-select-file" class="btn btn-outline-secondary" type="button"><?php _e('Select file') ?></button>
+                <button id="resumable-select-file" resumable-url="<?php echo __UPLOAD_URL ?>" resumable-legacy-url="<?php echo __LEGACY_UPLOAD_URL ?>" class="btn btn-outline-secondary" type="button"><?php _e('Select file') ?></button>
             </div>
         </div>
         <p>
@@ -15,7 +16,7 @@ if ($handler->token_created === null) {
             </div>
         </p>
         <p class="small">(*) <?php _e('A new link will be created. It will expire in a few days.') ?></p>    
-        <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], '/'); ?>" method="POST">
+        <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], get_root_url()); ?>" method="POST">
             <?php if (__ANONYMOUS_PASSWORDS) { ?>
             <div class="collapsible closed" opened-text='<?php _e('simple') ?> <i class="fas fa-angle-up"></i>' closed-text='<?php _e('advanced') ?> <i class="fas fa-angle-down"></i>' >
                 <div class="content">
@@ -40,11 +41,14 @@ if ($handler->token_created === null) {
         <div class="container">
             <button class="btn btn-primary btn-lg" id="resumable-send">compartir</button>
         </div>
+        <div class="container small">
+            <a href="javascript:showmodal_redeem();"><?php _e('i have a download token'); ?></a>
+        </div>
 </div>
 <?php
 } else {
     $oid = $handler->token_created->get_field('oid');
-    $link = __SERVER_NAME . __ROOT_FOLDER . $oid;
+    $link = rtrim(__SERVER_NAME, '/') . get_root_url() . $oid;
 
     $s=$handler->token_created->get_field('exp_secs'); $t=clone $handler->token_created->get_field('time'); $exp_date = $s===null?null:SCPM_datetime_to_string($t->add(new DateInterval('PT' . $s . 'S')));
     $h=$handler->token_created->get_field('exp_hits');

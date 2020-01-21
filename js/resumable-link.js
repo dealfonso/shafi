@@ -25,8 +25,12 @@ $(function() {
     
     var resumable_browse_button = document.getElementById('resumable-select-file');
     if (resumable_browse_button !== null) {
+        let upload_url = $('#resumable-select-file').attr('resumable-url');
+        if (upload_url === undefined) upload_url = '/upload';
+        let legacy_upload_url = $('#resumable-select-file').attr('resumable-legacy-url');
+        if (legacy_upload_url === undefined) upload_url = '/up';
         var resumableUpload = new Resumable({
-            target: '/upload',
+            target: upload_url,
             fileParameterName: 'uploadchunkedfile',
             chunkRetryInterval: 1000,
             testChunks: false,
@@ -35,7 +39,7 @@ $(function() {
         });
     
         if (!resumableUpload.support) 
-            location.href = '/up';
+            location.href = legacy_upload_url;
     
         resumableUpload.assignBrowse(resumable_browse_button);
     

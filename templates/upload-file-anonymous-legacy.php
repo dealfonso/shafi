@@ -1,8 +1,9 @@
+<?php include_once('templates/part/redeem-token.php'); ?>
 <?php
 if ($handler->token_created === null) {
 ?>
 <div class="col-md-6 offset-md-3 v-center text-center">
-    <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], '/up'); ?>" method="POST" enctype="multipart/form-data">
+    <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], __LEGACY_UPLOAD_URL); ?>" method="POST" enctype="multipart/form-data">
         <div class="custom-file">
             <input required="true" type="file" class="custom-file-input" id="fichero" name="fichero">
             <label class="custom-file-label" for="customFile"><?php _e('Select file') ?></label>
@@ -27,12 +28,15 @@ if ($handler->token_created === null) {
         <div class="container">
             <button type="submit" class="btn btn-primary btn-lg" id="compartir" name="compartir"><?php _e('share') ?></button>
         </div>
+        <div class="container small">
+            <a href="javascript:showmodal_redeem();"><?php _e('i have a download token'); ?></a>
+        </div>
     </form>
 </div>
 <?php
 } else {
     $oid = $handler->token_created->get_field('oid');
-    $link = __SERVER_NAME . __ROOT_FOLDER . $oid;
+    $link = rtrim(__SERVER_NAME, '/') . get_root_url() . $oid;
 
     $s=$handler->token_created->get_field('exp_secs'); $t=clone $handler->token_created->get_field('time'); $exp_date = $s===null?null:SCPM_datetime_to_string($t->add(new DateInterval('PT' . $s . 'S')));
     $h=$handler->token_created->get_field('exp_hits');

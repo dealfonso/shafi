@@ -25,7 +25,7 @@ function showmodal_redeem() {
 }
 $(function() {
     $('#redeem').on('click', function() {
-        location.href = "/" + $('#tokentr').val();
+        location.href = "<?php echo get_root_url(); ?>" + $('#tokentr').val();
     })
 })
 </script>

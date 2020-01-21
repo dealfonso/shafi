@@ -88,7 +88,7 @@ function showmodal_renew(v, t) {
                 </ul>
             </div>
             <div class="v-center">
-                <a class='download' href="<?php echo add_query_var(['op' => 'download', 'id' => $c_file->get_id() ], '/'); ?>"><i class="fas fa-file-download"></i></a>
+                <a class='download' href="<?php echo add_query_var(['op' => 'download', 'id' => $c_file->get_id() ], get_root_url()); ?>"><i class="fas fa-file-download"></i></a>
             </div>
         </div>
     </div>
@@ -107,8 +107,8 @@ function showmodal_renew(v, t) {
                     'function' => function ($o) { 
                         $oid = $o->get_field('oid');
                         if ($o->is_active())
-                        return  '<a class="control" href="/' . $oid . '" target=_blank>' . $oid . '<i class="openext fas fa-external-link-alt"></i></a>' . 
-                                '<a class="control clipboard" href="#" data-clipboard-text="'. rtrim(__SERVER_NAME, '/') . '/' . $oid .'"><i class="far fa-copy"></i></a>';
+                        return  '<a class="control" href="' . get_root_url() . $oid . '" target=_blank>' . $oid . '<i class="openext fas fa-external-link-alt"></i></a>' . 
+                                '<a class="control clipboard" href="#" data-clipboard-text="'. rtrim(__SERVER_NAME, '/') . get_root_url() . $oid .'"><i class="far fa-copy"></i></a>';
                         else
                         return $oid;
 
@@ -168,7 +168,7 @@ function showmodal_renew(v, t) {
         <a href="javascript:showmodal_cancelall()" class="btn btn-warning btn-lg" role="button">
             <i class="fas fa-trash"></i> <?php _e('Cancel all tokens') ?>
         </a>
-        <a href="javascript:showmodal_cancelfile('<?php echo htmlspecialchars($c_file->get_field('name')); ?>', '<?php echo $c_file->get_id(); ?>', '<?php echo add_query_var(['op' => 'del', 'id' => $c_file->get_id() ], '/admin'); ?>')" class="btn btn-danger btn-lg" role="button">
+        <a href="javascript:showmodal_cancelfile('<?php echo htmlspecialchars($c_file->get_field('name')); ?>', '<?php echo $c_file->get_id(); ?>', '<?php echo add_query_var(['op' => 'del', 'id' => $c_file->get_id() ], __ADMIN_URL); ?>')" class="btn btn-danger btn-lg" role="button">
             <i class="fas fa-trash"></i> <?php _e('Cancel file') ?>
         </a>
         </p>

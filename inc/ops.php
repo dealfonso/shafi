@@ -11,6 +11,7 @@ class SHAFI_Op_Form extends SHAFI_Op {
     protected function _read_hits_and_seconds_from_post() {
         $hits = null;
         $seconds = null;
+        $passwd = null;
         global $DEBUG;
         if (isset($_POST['exp_time'])) {
             if ($_POST['hours'] == -1) {
