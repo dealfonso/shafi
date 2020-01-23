@@ -81,7 +81,7 @@ function showmodal_renew(v, t) {
             <div class="v-center">
                 <ul>
                 <li><span class="label"><?php _e('Name') ?>: </span><?php echo $c_file->get_field('name'); ?></li>
-                <li><span class="label"><?php _e('Size') ?>: </span><?php echo human_filesize($storage_backend->getfilesize($c_file->get_field('path'))); ?></li>
+                <li><span class="label"><?php _e('Size') ?>: </span><?php echo human_filesize($c_file->get_field('size')); ?></li>
                 <li><span class="label"><?php _e('Creation date') ?>: </span><?php echo SCPM_datetime_to_string($c_file->get_field('time')); ?></li>
                 <li><span class="label"><?php _e('Status') ?>: </span><?php echo __STATE[$c_file->get_field('state')]; ?></li>
                 <li><span class="label"><?php _e('Owner') ?>: </span><?php echo $c_file->get_field('owner'); ?></li>
@@ -174,12 +174,14 @@ function showmodal_renew(v, t) {
         </p>
         <?php
         } else {
+            if (! $c_file->is_deleted()) {
         ?>
             <form method="POST">
                 <button type="submit" class="btn btn-info btn-lg" name="reactivate" id="submitbutton">
                     <i class="fas fa-play"></i> <?php _e('Activate file') ?></button>
             </form>
         <?php
+            }
         }
         ?>
     </div>

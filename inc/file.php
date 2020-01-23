@@ -27,7 +27,8 @@
             'name',                     // The name of the file
             'path',                     // The path of the file (according to the storage backend)
             'state',                    // The state of expiration (alive, expired, cancelled, etc.)
-            'stid'                      // A unique ID for the file, provided by the storage backend (probably won't be used)
+            'stid',                     // A unique ID for the file, provided by the storage backend (probably won't be used)
+            'size'  => 'int'            // The size of the file (useful for quotas)
         ];
 
         protected $owner = null;
@@ -36,6 +37,7 @@
         protected $name = null;
         protected $path = null;
         protected $state = 'p';
+        protected $size = 0;
 
         public function __construct($id = null) {
             parent::__construct($id);
@@ -47,11 +49,12 @@
             $this->stid = $fileinfo->stid;
             $this->name = $fileinfo->name;
             $this->path = $fileinfo->path;
+            $this->size = $fileinfo->size;
             $this->owner = $owner;
         }
 
         public function get_fileinfo() {
-            return new FileInfo($this->stid, $this->path, $this->name, $this->owner);
+            return new FileInfo($this->stid, $this->path, $this->name, $this->size, $this->owner);
         }
 
         public function is_deleted() {
@@ -73,6 +76,13 @@
         public function file_exists() {
             global $storage_backend;
             return $storage_backend->getfilesize($this->path) !== false;
+        }
+
+        public function get_owner_user() {
+            $user = SHAUser::search(['username' => $this->owner]);
+            if (sizeof($user) !== 1)
+                return null;
+            return $user[0];
         }
 
         public function cancel($autosave = false) {

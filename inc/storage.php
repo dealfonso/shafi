@@ -7,16 +7,23 @@ if ( ! defined( '__SHAFI_FOLDER' ) ) {
 require_once(__SHAFI_INC . 'mime.php');
 
 class FileInfo extends Object_ROProps {
-    const RDONLY = [ 'stid', 'path', 'name', 'meta' ];
+    const RDONLY = [ 'stid', 'path', 'name', 'meta', 'size', 'exists' ];
     protected $stid = null;
     protected $path = null;
     protected $name = null;
     protected $meta = null;
+    protected $size = 0;
+    protected $exists = false;
 
-    public function __construct($stid, $path, $fname, $meta = null) {
+    public function mark_existing() {
+        $this->exists = true;
+    }
+
+    public function __construct($stid, $path, $fname, $size, $meta = null) {
         $this->stid = $stid;
         $this->path = $path;
         $this->name = $fname;
+        $this->size = $size;
         $this->meta = $meta;
     }
 }
@@ -49,7 +56,63 @@ class StorageFileSystem extends StorageBackend {
         $this->secret = $secret;
     }
 
-    public function store($fname, $local_path, $meta = null) {
+    public function gen_fileinfo($fname, $local_path, $meta = null) {
+        // If the file does not exist or cannot get information about it, return fail
+        if (!file_exists($local_path)) 
+            return false;
+
+        $filesize = @filesize($local_path);
+        if ($filesize === false) 
+            return false;
+    
+        // Get a hash for the file (will be used as the filename)
+        $st_fname = md5_file($local_path);
+
+        // Generate a unique identifier for the file
+        $stid = md5("$st_fname$meta$this->secret");
+
+        // Prepare path in the remote storage
+        $remote_path = $st_fname[0] . '/' . $st_fname;
+
+        $fileinfo = new FileInfo($stid, $remote_path, $fname, $filesize, $meta);
+
+        // Get the actual path for the file in the filesystem
+        $dest_path = $this->base_path . '/' . $fileinfo->path;
+
+        // If the file exists and the size is the same, it already exists
+        if (file_exists($dest_path)) {
+            $remote_filesize = @filesize($dest_path);
+            if ($remote_filesize == $filesize)
+                $fileinfo->mark_existing();
+        }
+
+        return $fileinfo;
+    }
+
+    public function store($local_path, $fileinfo) {
+        // Check if the file exists
+        if (!file_exists($local_path)) 
+            return false;
+
+        // Get the actual folder in which the file is going to be stored
+        $dest_path = $this->base_path . '/' . $fileinfo->path;
+        $dest_folder = dirname($dest_path);
+
+        // Make sure that the folder exists
+        if (!file_exists($dest_folder)) {
+            if (@mkdir($dest_folder, 0770, true) === false)
+                return false;
+        }
+
+        // Move the file to the destination
+        if (rename($local_path, $dest_path)) {
+            $fileinfo->mark_existing();
+            return $fileinfo;
+        }
+        return false;
+    }
+
+    public function _store($fname, $local_path, $meta = null) {
         $st_fname = md5_file($local_path);
         $stid = md5("$st_fname$meta$this->secret");
         $dest_path = $this->base_path . '/' . $st_fname[0];
@@ -58,14 +121,15 @@ class StorageFileSystem extends StorageBackend {
 
         $remote_path = $st_fname[0] . '/' . $st_fname;
 
-        // Sometimes the file may not be uploaded (e.g. chunked upload), so we cannot use "move_uploaded_file"
-        /* if (is_uploaded_file($local_path)) {
-            if (move_uploaded_file($local_path, $dest_path))
-                return new FileInfo($stid, $remote_path, $fname, $meta);
-        } else {*/
+        if (!file_exists($local_path)) 
+            return false;
+
+        $filesize = @filesize($local_path);
+        if ($filesize === false) 
+            return false;
 
         if (rename($local_path, $dest_path))
-            return new FileInfo($stid, $remote_path, $fname, $meta);
+            return new FileInfo($stid, $remote_path, $fname, $filesize, $meta);
     
         return false;
     }
@@ -74,7 +138,7 @@ class StorageFileSystem extends StorageBackend {
         $remote_path = $this->base_path . '/' . $remote_path;
         if (!file_exists($remote_path)) 
             return false;
-        return filesize($remote_path);
+        return @filesize($remote_path);
     }
 
     public function retrieve($fileinfo) {

@@ -24,6 +24,7 @@ function create_db() {
         path text NOT NULL,
         state VARCHAR(1) DEFAULT 'a' NOT NULL,
         stid VARCHAR(36) NOT NULL,
+        size bigint NOT NULL,
         PRIMARY KEY (id)
     );";
 

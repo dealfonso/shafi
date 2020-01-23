@@ -29,7 +29,7 @@ div.toolbar {
 }
 body {
     /* to pass the toolbar */
-    margin-top: 2em;
+    margin-top: 5em;
 }
 div.toolbar span {
     padding-left: 0.5em;
@@ -151,4 +151,12 @@ h3 {
 
 div.collapsible.closed div.content {
     display: none;
+}
+
+.padding-top {
+    padding-top: 4em;
+}
+
+.overflow-scroll {
+    overflow: scroll;
 }

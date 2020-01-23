@@ -2,7 +2,7 @@
       include('templates/part/modal-confirm.php');
 ?>
 <div class="col-md-12">
-    <div class="container text-center">
+    <div class="container text-center overflow-scroll">
         <h3><?php _e('Available files') ?></h3>
         <?php
         global $current_user;
@@ -16,11 +16,13 @@
 
         $fields = array(
             "id" => [
-                'function' => function ($o) { 
-                    if ($o->is_active())
-                        return '<a href="' . add_query_var(['op' => 'edit', 'id' => $o->get_id() ], get_root_url()) . '">' . $o->get_id() . '<i class="openext far fa-edit"></i></a>';
+                'function' => function ($o) use ($current_user) { 
+                    $id = $o->get_id();
+                    $id = strlen($id)>20?substr($id, 0, 20)."...":$id;
+                    if (($o->is_active()) || ($current_user->is_admin()))
+                        return '<a href="' . add_query_var(['op' => 'edit', 'id' => $o->get_id() ], get_root_url()) . '">' . $id . '<i class="openext far fa-edit"></i></a>';
                     else
-                        return $o->get_id();
+                        return $id;
                 },
                 'title' => 'ID'
             ],
@@ -32,6 +34,11 @@
             "name" => [
                 'title' => __('Name'),
                 'function' => function($o) { $n = $o->get_field('name'); return strlen($n)>24?substr($n, 0, 24)."...":$n; }
+            ],
+            "size" => [
+                'title' => __('Size'),
+                'function' => function($o) { return human_filesize($o->get_field('size')); },
+                'value' => function($o) { return $o->get_field('size'); } 
             ],
             "estado" => array (
                 'title' => __('Status'), 
@@ -49,9 +56,9 @@
                     if ($o->is_active())
                         return '<a href="javascript:showmodal_cancelfile(\'' . htmlspecialchars($o->get_field('name')) . '\', \'' . $id .'\', \'' . add_query_var(['op' => 'del', 'id' => $id ], __ADMIN_URL) . '\')"><i class="fas fa-times"></i></a>';
                 }                            
-                )
+            )
         );
-        echo $list->render('sortable');
+        echo $list->render('sortable filtrable');
         ?>
     </div>
 </div>

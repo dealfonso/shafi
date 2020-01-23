@@ -9,19 +9,39 @@ class SHAFI_Op_Edit extends SHAFI_Op_File {
     const PERMS=[ 'edit' ];
 
     public function _do() {
+        global $current_user;
         $this->clear_messages();
 
+        // If the file is not active, we cannot perform any further operation
+        if ((! $this->file->is_active()) && (! $current_user->is_admin())) {
+            $this->file = null;
+
+            // Someone is trying to tamper or cheat our server
+            header("Location: " . add_query_var(['op' => 'list', 'id' => null ], __ADMIN_URL), true, 301);        
+            die();
+        }
+
         if (isset($_POST['reactivate'])) {
+            global $current_user;
+
+            // Defensive programming... the user should not reach to here
+            if (! $current_user->is_admin())
+                return $this->add_error_message(__('Only admins can reactivate files'));
+
+            global $quota_manager;
+            $owner_user = $this->file->get_owner_user();
+            if ($owner_user === null)
+                return $this->add_error_message(__('Failed to get the user\'s quota'));
+
+            if (! $quota_manager->meets_quota($current_user, $this->file->get_field('size')))
+                return $this->add_error_message(__('Quota exceeded'));
+
             if ($this->file->reactivate(true)) 
                 // Now we need to re-update the state
                 return $this->add_success_message(__('The file has been successfully activated'));
             else
                 return $this->add_error_message(__('The file could not be activated'));
         }
-
-        // If the file is not active, we cannot perform any further operation
-        if (! $this->file->is_active())
-            return false;
 
         if (isset($_POST['cancelall'])) {
             $tokens = $this->file->get_active_tokens();
