@@ -28,51 +28,15 @@ class SHAFI_Op_UploadFile extends SHAFI_Op_Form {
         if (($f_struct['error'] != 0) || ($f_struct['size'] == 0))
             return $this->add_error_message(__('File has not been properly transmitted to the server'));
 
-        if ((__MAX_FILESIZE>=0) && ($f_struct['size'] > __MAX_FILESIZE))
-            return $this->add_error_message(__('File size exceeds limits'));
+        global $quota_manager;
+        $max_filesize = $quota_manager->get_max_filesize();
+        if (($max_filesize>=0) && ($f_struct['size'] > $max_filesize))
+            return $this->add_error_message(sprintf(__('File size (%s) exceeds limits'), human_filesize($f_struct['size'])));
 
         if (!file_exists($f_struct['tmp_name']))
             return $this->add_error_message(__('Invalid file'));
 
         return $f_struct;
-    }
-
-    protected function _grab_uploaded_file($id) {
-        $f_struct = $this->_get_valid_file_struct($id);
-
-        if ($f_struct !== false) {
-            // Check if the file can be stored, depending on the quota
-            global $current_user;
-            global $quota_manager;
-            global $storage_backend;
-
-            $fileinfo = $storage_backend->gen_fileinfo($f_struct['name'], $f_struct['tmp_name']);
-            if ($fileinfo === false) 
-                return $this->add_error_message(__('Failed to get information about the file'));
-
-            $result = $storage_backend->store($f_struct['tmp_name'], $fileinfo);
-            if ($result === false)
-                return $this->add_error_message(__('Failed to store file in the backend'));
-            // Get the information of the file (to get the filesize)
-            /*
-            $result = $storage_backend->prestore($f_struct['name'], $f_struct['tmp_name']);
-            if ($result === false)
-                return $this->add_error_message(__('Failed to get the information about the file'));
-            
-            if (!$quota_manager->meets_quota($current_user, $result->size))
-                return $this->add_error_message(__('Quota exceeded'));
-            */
-            /*
-            // Use the storage backend to store the file
-            $result = $storage_backend->store($f_struct['name'], $f_struct['tmp_name']);
-            if ($result === false)
-                return $this->add_error_message(__('Failed to store file in the backend'));
-            */
-
-            // Return the resulting fileinfo structure
-            return $result;
-        }
-        return false;
     }
 
     protected function _get_sanitized_token_values() {
@@ -172,63 +136,6 @@ class SHAFI_Op_UploadFile extends SHAFI_Op_Form {
                 }
                 else
                     return $this->add_error_message(__('Failed to update file information in the database'));                
-            }
-
-            $token = $retval->create_token($seconds, $hits, $passwd);
-            if (! $token->create())
-                $this->add_error_message(__('Failed to create token, but the file is properly stored in the system'));
-            else
-                $this->token_created = $token;
-        }    
-        return $retval;
-    }
-
-    public function _old_do() {
-        global $current_user;
-        global $DEBUG;
-
-        $retval = false;
-        $this->clear_messages();
-
-        if (isset($_POST['compartir'])) {
-            // Get the values for the expiration times
-            $result = $this->_get_sanitized_token_values();
-
-            if ($result === false) 
-                return $this->add_error_message(__('Failed to obtain token parameters'));
-
-            [$hits, $seconds, $passwd] = $result;
-            
-            // Now deal with the file
-            $already_exists = false;
-
-            // TODO: check quota prior to store (also avoid storing if the file already exists in the storage backend)
-            if (($fileinfo = $this->_grab_uploaded_file('fichero')) === false)
-                return $this->add_error_message(__('Failed to store the file'));
-            else {
-                $f = SHAFile::search(['owner' => $current_user->get_username(), 'path' => $fileinfo->path, '!state' => 'd' ]);
-
-                if (sizeof($f) > 0) {
-                    $retval = $f[0];
-                    $already_exists = true;
-
-                    if ((! $retval->is_active()) && (! $retval->reactivate(true)))
-                        return $this->add_error_message(__('Could not reactivate the file'));
-                    else
-                        $this->add_warning_message(__('File existed and has been reactivated. Please check the tokens that it may have associated.'));
-                }
-                else {
-                    $n_file = new SHAFile();
-                    $n_file->set_basic_info($fileinfo, $current_user->get_username());
-
-                    if ($n_file->create()) {
-                        $retval = $n_file;
-                        $this->file_uploaded = $n_file;
-                        $this->add_success_message(_s('File %s successfully stored', $fileinfo->name));
-                    }
-                    else
-                        return $this->add_error_message(__('Failed to update file information in the database'));
-                }       
             }
 
             $token = $retval->create_token($seconds, $hits, $passwd);

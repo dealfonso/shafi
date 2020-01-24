@@ -147,21 +147,23 @@
                 </a>
                 <?php } ?>
                 <?php
-                    $filessize = $quota_manager->get_user_filessize($current_user);
-                    $quota = $quota_manager->get_user_quota($current_user);
-                    $pct = 0;
-                    if ($quota > 0)
-                        $pct = 100.0 * (float)$filessize / (float)$quota;
-                    
-                    $fillclass = 'bg-success';
-                    if ($pct > 40) $fillclass = 'bg-info';
-                    if ($pct > 75) $fillclass = 'bg-warning';
-                    if ($pct > 90) $fillclass = 'bg-danger';
+                    if ($current_user->is_logged_in()) {
+                        $filessize = $quota_manager->get_user_filessize($current_user);
+                        $quota = $quota_manager->get_user_quota($current_user);
+                        $pct = 0;
+                        if ($quota > 0)
+                            $pct = 100.0 * (float)$filessize / (float)$quota;
+                        
+                        $fillclass = 'bg-success';
+                        if ($pct > 40) $fillclass = 'bg-info';
+                        if ($pct > 75) $fillclass = 'bg-warning';
+                        if ($pct > 90) $fillclass = 'bg-danger';
 
-                    $pctstyle = sprintf("%.2f", min($pct, 100));
-                    $pct = sprintf("%.2f", $pct, 100);
-                    $intext = human_filesize($filessize) . "($pct %)";                    
-                    echo "<div class='progress'><div class='progress-bar $fillclass' role='progressbar' style='width: $pctstyle%'>$intext</div></div>";
+                        $pctstyle = sprintf("%.2f", min($pct, 100));
+                        $pct = sprintf("%.2f", $pct, 100);
+                        $intext = human_filesize($filessize) . "($pct %)";                    
+                        echo "<div class='progress'><div class='progress-bar $fillclass' role='progressbar' style='width: $pctstyle%'>$intext</div></div>";
+                    }
                 ?>
             </div>
         </div>

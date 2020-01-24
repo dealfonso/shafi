@@ -11,9 +11,11 @@
         'a' => __('active'),        // The file is active and can be downloaded, added tokens, etc.
         'g' => __('grace period'),  // This is the same case than 'a', except that will be deleted soon because it has no active tokens
         'p' => __('processing'),    // This state is near 'a', but the file cannot be downloaded. It is for cases in which the file needs to be zipped or uploaded to other backend
-        'e' => __('expired'), 
-        'c' => __('cancelled'), 
+        'e' => __('expired'),       // The file has expired because all its token have expired or have been cancelled (this happens after a grace period)
+        'c' => __('cancelled'),     // The same than before, but the user has cancelled the file (the effect is exactly the same than 'e')
         'd' => __('deleted')        // In this state the file cannot be used... it is the same as if the file did not exist
+        // For an end-user, the states for a file 'c', 'e' and 'd' are exactly the same. For the admin purposes, files in states 'e' and 'c' can be re-activated again;
+        // - An end-user that sends a file again will re-activate the file, in case that it is in state 'c' or 'e'
     ]);
         
     class SHAFile extends SCPM_DBObject {

@@ -47,10 +47,13 @@ if (!defined('__ALLOW_INFINITE_TOKENS'))
 /**
  * Files sizes and quotas
  */
-// Max file size. Have in mind that it must be compatible with "upload_max_filesize" in php.ini
-define('__MAX_FILESIZE', 10*1024*1024);
 
-define('__STORAGE_QUOTA_DEFAULT', 1024 * 1024);
+// Max file size. Have in mind that it must be compatible with "upload_max_filesize" in php.ini
+define('__MAX_FILESIZE', array(
+    '' => 1*1024*1024,
+    'u' => 10*1024*1024,
+    'a' => 100*1024*1024
+));
 
 define('__STORAGE_QUOTA_GROUP', array(
     'u' => 10*1024*1024,
