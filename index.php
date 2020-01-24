@@ -18,6 +18,7 @@
     require_once(__SHAFI_INC . 'ops.php');
     require_once(__SHAFI_INC . 'list.php');
     require_once(__SHAFI_INC . 'router.php');
+    require_once(__SHAFI_INC . 'quota.php');
 
     // TODO:
     // - enable mail sending of links
@@ -120,7 +121,7 @@
         </div>
         <div class="toolbar">
             <div class="left"><a href="<?php echo get_root_url() ?>"><i class="fas fa-home"></i><span class="label">ShaFi</span></a></div>
-            <div class="right">
+            <div class="right w-25">
                 <?php if ($current_user->is_logged_in()) { ?>
                     <?php if ($current_user->is_admin()) { ?>
                         <a href="<?php echo add_query_var(['op' => 'users', 'id' => null], __ADMIN_URL); ?>">
@@ -129,6 +130,7 @@
                         <a href="<?php echo add_query_var(['op' => 'listall', 'id' => null], __ADMIN_URL); ?>">
                         <i class="fas fa-archive"></i><span><?php _e('Files from all users') ?></span>
                         </a> 
+                        <br>
                     <?php } ?>
                 <a href="<?php echo add_query_var(['op' => 'list', 'id' => null], __ADMIN_URL); ?>">
                     <i class="fas fa-list"></i><span><?php _e('Files') ?></span>
@@ -144,6 +146,25 @@
                     <i class="fas fa-user-slash"></i><span><?php _e('Log in') ?></span>
                 </a>
                 <?php } ?>
+                <?php
+                    if ($current_user->is_logged_in()) {
+                        $filessize = $quota_manager->get_user_filessize($current_user);
+                        $quota = $quota_manager->get_user_quota($current_user);
+                        $pct = 0;
+                        if ($quota > 0)
+                            $pct = 100.0 * (float)$filessize / (float)$quota;
+                        
+                        $fillclass = 'bg-success';
+                        if ($pct > 40) $fillclass = 'bg-info';
+                        if ($pct > 75) $fillclass = 'bg-warning';
+                        if ($pct > 90) $fillclass = 'bg-danger';
+
+                        $pctstyle = sprintf("%.2f", min($pct, 100));
+                        $pct = sprintf("%.2f", $pct, 100);
+                        $intext = human_filesize($filessize) . "($pct %)";                    
+                        echo "<div class='progress'><div class='progress-bar $fillclass' role='progressbar' style='width: $pctstyle%'>$intext</div></div>";
+                    }
+                ?>
             </div>
         </div>
         <div class="container h-100">

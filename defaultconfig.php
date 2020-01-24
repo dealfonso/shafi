@@ -5,6 +5,9 @@ if (file_exists(__SHAFI_FOLDER . 'config.php'))
 
 define('_DEBUG', true);
 
+if (!defined('__MAX_STORAGE_USER'))
+    define('__MAX_STORAGE_USER', -1);
+
 if (!defined('__STORAGE_BASE_FOLDER'))
     define('__STORAGE_BASE_FOLDER', './uploads');
 
@@ -41,8 +44,23 @@ define('__UPLOAD_URL', rtrim(__ROOT_URL, '/') . '/upload');
 if (!defined('__ALLOW_INFINITE_TOKENS'))
     define('__ALLOW_INFINITE_TOKENS', true);
 
+/**
+ * Files sizes and quotas
+ */
+
 // Max file size. Have in mind that it must be compatible with "upload_max_filesize" in php.ini
-define('__MAX_FILESIZE', 10*1024*1024);
+define('__MAX_FILESIZE', array(
+    '' => 1*1024*1024,
+    'u' => 10*1024*1024,
+    'a' => 100*1024*1024
+));
+
+define('__STORAGE_QUOTA_GROUP', array(
+    'u' => 10*1024*1024,
+    'a' => 100*1024*1024
+));
+
+define('__STORAGE_QUOTA_ANONYMOUS', 10 * 1024 * 1024);
 
 /**
  * Anonymous uploads: this kind of users do not need to provide any credentials; somehow the free part of wetransfer.
