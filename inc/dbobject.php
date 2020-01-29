@@ -83,6 +83,37 @@ class SCPM_DBObject {
         $this->id = $id;
     }
 
+    public static function p_search($condition = array(), $loadmetadata = false, $conditioncompose = 'AND', $orderby = null) {
+        global $wpdb;
+
+        $class = get_called_class();
+        $db_tablename = self::get_db_tablename();
+
+        $objs = $wpdb->p_search($db_tablename, $condition, $conditioncompose, $orderby);
+
+        $result = array();
+        foreach ($objs as $dbobj) {
+
+            // Create the object using the id just in case the other functions do not set the id
+            $id = null;
+            if (isset($dbobj->id)) $id = $dbobj->id;
+
+            // Instantiate the object from the current class
+            $new_obj = new $class($id);
+
+            // Load the data
+            if ($new_obj->_initialize_data($dbobj)) {
+                if ($loadmetadata)
+                    $new_obj->load_metadata();
+
+                array_push($result, $new_obj);
+            }
+        }
+
+        // Finally return the objects
+        return $result;
+    }
+
     /**
      * Searches for objects using an AND condition. It returns effective objects of the calling subclass
      *   whose data has been loaded, by using the function _initialize_data(...)
@@ -390,7 +421,7 @@ class SCPM_DBObject {
 
         $id = $this->get_id();
 
-        $count = $wpdb->update(self::get_db_tablename(), $sql_values, array($class::$db_id => $this->get_id()), $sql_formats);
+        $count = $wpdb->p_update(self::get_db_tablename(), $sql_values, array($class::$db_id => $this->get_id()), $sql_formats);
         if ($count === false) {
             if ($__DDN_DEBUG) $wpdb->print_error();
             $id = null;
@@ -416,7 +447,7 @@ class SCPM_DBObject {
         if ($__DDN_DEBUG) $wpdb->show_errors(); 
 
         if ($this->_id_function === null) {
-            $result = $wpdb->insert(self::get_db_tablename(), $sql_values, $sql_formats);
+            $result = $wpdb->p_insert(self::get_db_tablename(), $sql_values, $sql_formats);
             if ($result !== false) {
                 $id = $wpdb->insert_id;
 
@@ -424,7 +455,7 @@ class SCPM_DBObject {
                 if ($current_id !== null) {
                     $count = $wpdb->update(self::get_db_tablename(), array($class::$db_id => $current_id), array($class::$db_id => $id));                
                     if ($count === false) {
-                        $wpdb->delete(self::get_db_tablename(), array($class::$db_id => $id));
+                        $wpdb->p_delete(self::get_db_tablename(), array($class::$db_id => $id));
                         $id = null;
                     } else
                         $id = $current_id;
@@ -446,7 +477,7 @@ class SCPM_DBObject {
                 array_push($sql_formats, '%s');
             $sql_values[$class::$db_id] = $current_id;
 
-            $result = $wpdb->insert(self::get_db_tablename(), $sql_values, $sql_formats);
+            $result = $wpdb->p_insert(self::get_db_tablename(), $sql_values, $sql_formats);
             if ($result !== false) {
                 $id = $current_id;
                 // Set the proper insert_id
@@ -482,7 +513,7 @@ class SCPM_DBObject {
 
         list($sql_values, $sql_formats) = $this->_prepare_fields_for_sql($fields);
 
-        if ($wpdb->delete(self::get_db_tablename(), $sql_values, $sql_formats) === false) {
+        if ($wpdb->p_delete(self::get_db_tablename(), $sql_values, $sql_formats) === false) {
             return false;
         } else {
             return true;
