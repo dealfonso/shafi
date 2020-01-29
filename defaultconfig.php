@@ -3,11 +3,6 @@
 if (file_exists(__SHAFI_FOLDER . 'config.php'))
     require_once(__SHAFI_FOLDER . 'config.php');
 
-define('_DEBUG', true);
-
-if (!defined('__MAX_STORAGE_USER'))
-    define('__MAX_STORAGE_USER', -1);
-
 if (!defined('__STORAGE_BASE_FOLDER'))
     define('__STORAGE_BASE_FOLDER', './uploads');
 
@@ -40,7 +35,6 @@ define('__ADMIN_URL', rtrim(__ROOT_URL, '/') . '/admin');
 define('__LEGACY_UPLOAD_URL', rtrim(__ROOT_URL, '/') . '/up');
 define('__UPLOAD_URL', rtrim(__ROOT_URL, '/') . '/upload');
 
-
 if (!defined('__ALLOW_INFINITE_TOKENS'))
     define('__ALLOW_INFINITE_TOKENS', true);
 
@@ -49,37 +43,47 @@ if (!defined('__ALLOW_INFINITE_TOKENS'))
  */
 
 // Max file size. Have in mind that it must be compatible with "upload_max_filesize" in php.ini
-define('__MAX_FILESIZE', array(
-    '' => 1*1024*1024,
-    'u' => 10*1024*1024,
-    'a' => 100*1024*1024
-));
+if (! defined('__MAX_FILESIZE'))
+    define('__MAX_FILESIZE', array(
+        '' => 1*1024*1024,
+        'u' => 10*1024*1024,
+        'a' => 100*1024*1024
+    ));
 
-define('__STORAGE_QUOTA_GROUP', array(
-    'u' => 10*1024*1024,
-    'a' => 100*1024*1024
-));
+if (! defined('__STORAGE_QUOTA_GROUP'))
+    define('__STORAGE_QUOTA_GROUP', array(
+        'u' => 10*1024*1024,
+        'a' => 100*1024*1024
+    ));
 
-define('__STORAGE_QUOTA_ANONYMOUS', 10 * 1024 * 1024);
+if (! defined('__STORAGE_QUOTA_ANONYMOUS'))
+    define('__STORAGE_QUOTA_ANONYMOUS', 10 * 1024 * 1024);
 
 /**
  * Anonymous uploads: this kind of users do not need to provide any credentials; somehow the free part of wetransfer.
  *   - the size will be limited by using quotas
  */
 // Enable anonymous upload or not
-define('__ANONYMOUS_UPLOAD', true);
+if (! defined('__ANONYMOUS_UPLOAD'))
+    define('__ANONYMOUS_UPLOAD', true);
 // Anonymous links will expire in 1 week
-define('__ANONYMOUS_UPLOAD_DEFAULT_SECONDS', 60*60*24*7); 
+if (! defined('__ANONYMOUS_UPLOAD_DEFAULT_SECONDS'))
+    define('__ANONYMOUS_UPLOAD_DEFAULT_SECONDS', 60*60*24*7); 
 // No expiration with hits. Maybe we want to protect the system, setting it to a reasonable amount of times (let's say) 100.
-define('__ANONYMOUS_UPLOAD_DEFAULT_HITS', null); 
+if (! defined('__ANONYMOUS_UPLOAD_DEFAULT_HITS'))
+    define('__ANONYMOUS_UPLOAD_DEFAULT_HITS', null); 
 // Allow anonymous passwords (if changed, passwords will be kept)
-define('__ANONYMOUS_PASSWORDS', true);
-
+if (! defined('__ANONYMOUS_PASSWORDS'))
+    define('__ANONYMOUS_PASSWORDS', false);
 
 if (!isset($db_servername)) $db_servername = "localhost";
 if (!isset($db_username)) $db_username = "shafiuser";
 if (!isset($db_password)) $db_password = "vOajLWzJ6MPetpyq";
 if (!isset($db_database)) $db_database = "shafi";
+
+
+if (! defined('__TOKEN_GENERATOR_FUNCTION'))
+    define('__TOKEN_GENERATOR_FUNCTION', 'UUID::v4');
 
 require_once(__SHAFI_INC . 'dbcreation.php');
 ?>

@@ -42,7 +42,7 @@
         protected $size = 0;
 
         public function __construct($id = null) {
-            parent::__construct($id);
+            parent::__construct("file", $id);
             $this->set_id_function("UUID::v4");
             $this->time = new Datetime();
         }

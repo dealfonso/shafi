@@ -148,3 +148,23 @@
            return false;
        return true;
    }
+
+   /**
+    * https://stackoverflow.com/a/13733588
+    * Generate a token of limited size, using an alphabet; a replacement for the id function
+    */
+   function get_random_string($length = 8){
+
+    // 218340105584896 combinations (> 2*10^14) vs UUID (> 5*10^36)
+    $token = "";
+    $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+    $codeAlphabet.= "0123456789";
+    $max = strlen($codeAlphabet);
+
+   for ($i=0; $i < $length; $i++) {
+       $token .= $codeAlphabet[random_int(0, $max-1)];
+   }
+
+   return $token;
+}   

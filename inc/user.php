@@ -43,7 +43,7 @@ class SHAUser extends SCPM_DBObject {
     }
 
     public function __construct($id = null) {
-        parent::__construct($id);
+        parent::__construct('user', $id);
     }
 
     public function get_username() {

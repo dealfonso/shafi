@@ -9,6 +9,9 @@ require_once(__SHAFI_INC . 'uuid.php');
 require_once(__SHAFI_INC . 'storage.php');
 require_once(__SHAFI_INC . 'file.php');
 
+if ( ! defined('__TOKEN_GENERATOR_FUNCTION'))
+    define('__TOKEN_GENERATOR_FUNCTION', 'UUID::v4');
+
 class SHAHit extends SCPM_DBObject {
     // TODO: decide whether to implement this or not
     protected static $db_tablename = 'hits';
@@ -17,6 +20,10 @@ class SHAHit extends SCPM_DBObject {
         'ip',
         'referer'
     ];
+
+    public function __construct($id = null) {
+        parent::__construct('hit', $id);
+    }
 }
 
 class SHAToken extends SCPM_DBObject {
@@ -118,8 +125,11 @@ class SHAToken extends SCPM_DBObject {
         }
 
         public function __construct($id = null) {
-            parent::__construct($id);
-            $this->oid = UUID::v4();
+            parent::__construct('token', $id);
+            if (is_callable(__TOKEN_GENERATOR_FUNCTION))
+                $this->oid = call_user_func(__TOKEN_GENERATOR_FUNCTION);
+            else
+                $this->oid = UUID::v4();
             $this->time = new Datetime();
         }
 
