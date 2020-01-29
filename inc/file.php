@@ -248,7 +248,7 @@
                     $filter['!state'] = 'd';
             }
 
-            return SHAToken::search($filter, 0, 0, false, 'AND', 'time');
+            return SHAToken::search($filter, false, 'AND', 'time');
         }
 
         public function OLD_get_tokens($deleted = false) {
@@ -257,9 +257,9 @@
 
             if ($deleted === false)
                 return SHAToken::search([ 'fileid' => $this->get_id(), '!state' => 'd' ],
-                    0, 0, false, 'AND', 'time');
+                    false, 'AND', 'time');
             else
                 return SHAToken::search([ 'fileid' => $this->get_id() ],
-                    0, 0, false, 'AND', 'time');
+                    false, 'AND', 'time');
         }        
     }

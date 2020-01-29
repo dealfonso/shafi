@@ -8,10 +8,10 @@
         global $current_user;
         if ($show_all_users) {
             // This is the unique moment in which a file in 'd' state can be shown
-            $files = SHAFile::search([], 0, 0, false, 'AND', 'time');
+            $files = SHAFile::search([], false, 'AND', 'time');
         } else {
             $files = SHAFile::search(['owner' => $current_user->get_username(), '!state' => 'd' ],
-                0, 0, false, 'AND', 'time');
+                false, 'AND', 'time');
         }
 
         $fields = array(

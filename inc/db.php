@@ -24,10 +24,6 @@ class DB extends Object_ROProps {
     public $insert_id = null;
     protected $_results = null;
 
-    public function p_get_results() {
-        return $this->_results;
-    }
-
     protected function __construct($db_servername, $db_username, $db_password, $db_database, $db_tables_prefix = null) {
 
         // Create connection
@@ -42,28 +38,15 @@ class DB extends Object_ROProps {
     public function query($query) {
         if ($this->is_connected()) {
             $result = $this->conn->query($query);
+            $this->_results = $result;
+
             $this->error = null;
             if ($result === false)
                 $this->error = $this->conn->error;
-            return $result;
+
+            return $result !== false;
         }
         return false;
-    }
-
-    protected function _build_values($values) {
-        $names_a = array();
-        $values_a = array();
-        foreach ($values as $k => $v) {
-            array_push($names_a, "`$k`");
-            if ($v === null)
-                array_push($values_a, "NULL");
-            else
-                if (is_int($v))
-                    array_push($values_a, sprintf("%d", $v));    
-                else
-                    array_push($values_a, sprintf("'%s'", $this->conn->real_escape_string($v)));
-        }
-        return [$names_a, $values_a]; 
     }
 
     public function p_query($query_str, $types_s, $values_a) {
@@ -99,22 +82,6 @@ class DB extends Object_ROProps {
         return 's';
     }
 
-    protected function _prepare_array($value) {
-        $array_a = array();
-        $values_a = array();
-        $types_s = "";
-        foreach ($value as $v) {
-            if ($v === null)
-                array_push($array_a, 'null');
-            else {
-                array_push($array_a, '?');
-                array_push($values_a, $v);
-                $types_s .= $this->_type_c($v);
-            }
-        }
-        return [ $array_a, $types_s, $values_a ];
-    }
-
     protected function _prepare_markers($value) {
         $keys_a = array();
         $markers_a = array();
@@ -132,7 +99,6 @@ class DB extends Object_ROProps {
         }
         return [ $markers_a, $types_s, $values_a, $keys_a ];
     }
-
 
     protected function _p_build_where($condition, $conditioncompose) {
         $where_a = array();
@@ -179,7 +145,7 @@ class DB extends Object_ROProps {
             }
             else {
                 if (is_array($value)) {
-                    list($array_s, $a_types, $a_values) = $this->_prepare_array($value);
+                    list($array_s, $a_types, $a_values, $keys_a) = $this->_prepare_markers($value);
                     $values_a = array_merge($values_a, $a_values);
                     $types_s .= $a_types;
                     if ($negative)
@@ -242,49 +208,23 @@ class DB extends Object_ROProps {
         return $result;
     }
 
-    /*
-    public function DEPRECATED_insert($table, $values, $formats = null) {
-        list($names_a, $values_a) = $this->_build_values($values);
-        $query = "INSERT INTO `$table` (" . implode(',', $names_a) . ') VALUES (' . implode(",", $values_a) . ');';
-        $result = $this->query($query);
-        if ($result !== false)
-            $this->insert_id = $this->conn->insert_id;
-        return $result;
-    }
-    */
-
-    protected function _build_where($where, $join = 'AND') {
-        $terms = array();
-        foreach ($where as $k => $v) {
-            if ($v === null)
-                array_push($terms, "`$k` IS NULL");
-            else {
-                if (is_int($v))
-                    array_push($terms, sprintf("`$k` = %d", $v));    
-                else
-                    array_push($terms, sprintf("`$k` = '%s'", $this->conn->real_escape_string($v)));
-            }
-        }
-        return implode(" $join ", $terms);
-    }
-
-    /**
-     * Executes one query, but it is only oriented to SELECT queries
-     */
-    public function get_results($query, $output = OBJECT) {
-
+    public function get_results($query = null, $output = OBJECT) {
         // Only accept to return objects (simplification from wpdb class)
         if ($output !== OBJECT) return false;
 
-        $objects = array();
-        $result = $this->query($query);
+        $result = null;
+        if ($query !== null)
+            if ($this->query($query) === false)
+                return false;
+        
+        if ($this->_results === null) return false;
+        if ($this->_results === false) return false;
 
+        $objects = array();
         $num_rows = 0;
-        if ($result instanceof mysqli_result) {
-            while ( $row = mysqli_fetch_object( $result ) ) {
-                $objects[ $num_rows ] = $row;
-                $num_rows++;
-            }
+        while ($obj = $this->_results->fetch_object()) {
+            $objects[ $num_rows ] = $obj;
+            $num_rows++;
         }
         return $objects;
     }
@@ -297,11 +237,6 @@ class DB extends Object_ROProps {
         $result = $this->p_query($query_str, $types_s, $values_a);
 
         return $result;
-    }
-
-    public function DEPRECATED_delete($table, $where) {
-        $query = "DELETE FROM `$table` WHERE " . $this->_build_where($where);
-        return $this->query($query);
     }
 
     public function p_update($table, $new_values, $where) {
@@ -322,16 +257,6 @@ class DB extends Object_ROProps {
         $values_a = array_merge($values_a, $values_w_a);
 
         return $this->p_query($query_str, $types_s, $values_a);
-    }
-
-    public function DEPRECATED_update($table, $new_values, $where, $formats = null) {
-        list($names_a, $values_a) = $this->_build_values($new_values);
-        $values = array();
-        for ($i = 0; $i < sizeof($names_a); $i++)
-            array_push($values, sprintf("%s = %s", $names_a[$i], $values_a[$i]));
-
-        $query = "UPDATE `$table` SET " . implode($values, ' , ') . " WHERE " . $this->_build_where($where);
-        return $this->query($query);
     }
 }
 

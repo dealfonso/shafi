@@ -83,7 +83,15 @@ class SCPM_DBObject {
         $this->id = $id;
     }
 
-    public static function p_search($condition = array(), $loadmetadata = false, $conditioncompose = 'AND', $orderby = null) {
+    /**
+     * Searches for objects using an AND condition. It returns effective objects of the calling subclass
+     *   whose data has been loaded, by using the function _initialize_data(...)
+     * 
+     * @param condition Array of fields => value that will compose the WHERE clause (using the condition: default is AND)
+     * @param loadmetadata Whether the metadata has to be automatically loaded (true) or not (false). It should be avoided if possible in order to get more performance.
+     * @param conditioncompose The keyword to compose the condition (default AND)
+     */
+    public static function search($condition = array(), $loadmetadata = false, $conditioncompose = 'AND', $orderby = null) {
         global $wpdb;
 
         $class = get_called_class();
@@ -113,123 +121,6 @@ class SCPM_DBObject {
         // Finally return the objects
         return $result;
     }
-
-    /**
-     * Searches for objects using an AND condition. It returns effective objects of the calling subclass
-     *   whose data has been loaded, by using the function _initialize_data(...)
-     * 
-     * @param condition Array of fields => value that will compose the WHERE clause (using the condition: default is AND)
-     * @param limit Limit the number of objects to query
-     * @param skip Skip an amount of object
-     * @param loadmetadata Whether the metadata has to be automatically loaded (true) or not (false). It should be avoided if possible in order to get more performance.
-     * @param conditioncompose The keyword to compose the condition (default AND)
-     */
-    public static function search($condition = array(), $limit = 0, $skip = 0, $loadmetadata = false, $conditioncompose = 'AND', $orderby = null) {
-        // Prepare the conditions
-        $query_cond = "1";
-        $query_a = array();
-
-        foreach ($condition as $key => $value) {
-            $negative = false;
-            if ($key[0] === '!') {
-                $negative = true;
-                $key = substr($key, 1);
-            }
-            if ($value === null) {
-                if ($negative) {
-                    $query_cond .= " $conditioncompose `$key` is not null";
-                    array_push($query_a, "`$key` is not null");
-                }
-                else {
-                    $query_cond .= " $conditioncompose `$key` is null";
-                    array_push($query_a, "`$key` is null");
-                }
-            }
-            else {
-
-                if (is_array($value)) {
-                    $value = array_map(function($v) { 
-                        if ($v === null) return 'null';
-                        if (is_numeric($v)) return $v;
-                        return "'$v'";
-                    }, $value);
-                    if ($negative) {
-                        $query_cond .= " $conditioncompose `$key` not in (". implode(', ', $value).")";
-                        array_push($query_a, "`$key` not in (". implode(', ', $value).")");
-                    }
-                    else {
-                        $query_cond .= " $conditioncompose `$key` in (". implode(', ', $value).")";
-                        array_push($query_a, "`$key` in (". implode(', ', $value).")");
-                    }
-                } else {
-                    if ($negative) {
-                        $query_cond .= " $conditioncompose `$key` <> '$value'";
-                        array_push($query_a, "`$key` <> '$value'");
-                    }
-                    else {
-                        $query_cond .= " $conditioncompose `$key` = '$value'";
-                        array_push($query_a, "`$key` = '$value'");
-                    }
-                }
-            }
-        }
-
-        // TODO: we are keeping both ways of creating the query condition, but it should be only needed this one
-        $query_cond = "";
-        if (sizeof($query_a) > 0)
-            $query_cond = "WHERE " . implode(" $conditioncompose ", $query_a);
-
-        $limit_cond = "";
-        if ($limit > 0) {
-            $limit_cond = " LIMIT $limit";
-            if ($skip > 0) $limit_cond .= ', $skip';
-        } else
-            if ($skip > 0) $limit_cond = " LIMIT 0, $skip";
-
-        global $wpdb;
-
-        // Get the specific table names
-        $class = get_called_class();
-        $db_tablename = self::get_db_tablename();
-
-        //
-        $orderby_cond = '';
-        if ($orderby !== null) {
-            if (is_array($orderby))
-                $orderby_cond = ' ORDER BY ' . implode(',', $orderby);
-            else
-                $orderby_cond = ' ORDER BY ' . $orderby;
-        }
-
-        //pre_var_dump("SELECT * FROM $db_tablename WHERE $query_cond$limit_cond$orderby_cond");
-        // Get the results
-        $objs = $wpdb->get_results(
-            "SELECT * FROM $db_tablename $query_cond$limit_cond$orderby_cond", OBJECT
-        );
-
-        $result = array();
-        foreach ($objs as $dbobj) {
-
-            // Create the object using the id just in case the other functions do not set the id
-            $id = null;
-            if (isset($dbobj->id)) $id = $dbobj->id;
-
-            // Instantiate the object from the current class
-            $new_obj = new $class($id);
-
-            // Load the data
-            if ($new_obj->_initialize_data($dbobj)) {
-                if ($loadmetadata)
-                    $new_obj->load_metadata();
-
-                array_push($result, $new_obj);
-            }
-        }
-
-        // Finally return the objects
-        return $result;
-    }
-
 
     /**
      * Gets an object from the database, using its id
@@ -453,7 +344,7 @@ class SCPM_DBObject {
 
                 // Autoincrement fields cannot be set when creating, so we update the new object to have the id value
                 if ($current_id !== null) {
-                    $count = $wpdb->update(self::get_db_tablename(), array($class::$db_id => $current_id), array($class::$db_id => $id));                
+                    $count = $wpdb->p_update(self::get_db_tablename(), array($class::$db_id => $current_id), array($class::$db_id => $id));                
                     if ($count === false) {
                         $wpdb->p_delete(self::get_db_tablename(), array($class::$db_id => $id));
                         $id = null;
