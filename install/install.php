@@ -20,7 +20,7 @@
         return substr(str_shuffle($chars),0,$length);
     }
 
-    $var = [ 'dbhost' => 'localhost:3306', 'dbname' => 'shafi', 'dbuser', 'dbpassword', 'servername', 'rooturl' => '/', 'storageroot' => './uploads', 'adminuser' => 'shafi', 'adminpassword' => '123'  ];
+    $var = [ 'dbhost' => 'localhost', 'dbname' => 'shafi', 'dbuser', 'dbpassword', 'servername', 'rooturl' => '/', 'storageroot' => './uploads', 'adminuser' => 'shafi', 'adminpassword' => '123', 'enableanonymous' => null  ];
     foreach ($var as $k => $v) {
         $default = null;
         if (is_int($k)) {
@@ -75,8 +75,11 @@
                     "\$db_password='${info['dbpassword']}';",
                     "define('__STORAGE_BASE_FOLDER', '${info['storageroot']}');",
                     "define('__SERVER_NAME', '${info['servername']}');",
-                    "define('__ROOT_URL', '${info['rooturl']}');",
-                    "?>"
+                    "define('__ROOT_URL', '${info['rooturl']}');"
+                    );
+
+                    array_push($config_lines, 
+                        "define('__ANONYMOUS_UPLOAD', '" . ($info['enableanonymous'] === null?"false":"true") . "');"
                     );
                     
                     $htaccess = array(
@@ -273,6 +276,13 @@ $ apachectl restart
                                     If you plan to dedicate a server (e.g. shafi.myhosting.com), then you can set <span class="font-weight-bold">http://shafi.myhosting.com</span> as the Web server URL, and <span class="font-weight-bold">/</span> as the path.
                                     </div>
                                 </div>                                
+                                <h3>Anonymous uploads</h3>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="enableanonymous" id="enableanonymous" value="yes" <?php echo ($info['enableanonymous']===null?"":"checked"); ?>
+                                        <label class="form-check-label" for="enableanonymous">Enable anonymous upload</label>
+                                    </div>                  
+                                </div>              
                                 <h3>File storage</h3>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label"  for="storageroot">Folder to store files </label>
