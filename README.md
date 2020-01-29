@@ -7,6 +7,15 @@ ShaFI implements two main workflows:
 
 ![A file created by a registered user](img/create-file.png)
 
+## Features
+
+1. *Anonymous uploads* can be enabled or not (if disabled, only authenticated users can upload files, but downloads are public).
+1. It is possible to create *multiple access tokens for the same file* (thus having differente expiration features such as date or hits).
+1. It is possible to include a *password to protect a specific token*.
+1. It is possible to define a *maximum size for the files*. And it can be different for anonymous users than for registered ones. Moreover it can be different for each group of registered users (e.g. users, admins, etc.).
+1. It is possible to *stablish a quota* for the storage size of files. The quota can be defined per user or per group of users. The quota is not shared, and only the files consume quota (not each token).
+1. *Uploading files is resumable*. That means that, if network connection is lost and the file was uploading, the user will need to upload only the part that has not already been uploaded.
+
 ## Installation
 
 ### Test using docker
@@ -89,6 +98,138 @@ In this guide we'll use the following settings:
 - URL path for ShaFi: /shafi
 
 Prepare the ShaFi configuration file `/var/www/html/shafi/config.php` and the htaccess file `/var/www/html/shafi/.htaccess` with the result of the configuration.
+
+## Configuring ShaFi
+
+The configuration of ShaFi, is controlled by a file `config.php` in the root folder of ShaFi. In that file you can include some variable definitions to configure the different options of ShaFi. You have an example file `config.php-sample` that contains the different options explained.
+
+It is a good idea to configure ShaFi by using the `install.php` web page. It will ask you for the essential configuration and will enable to create the basic configuration file. Then you can follow this guide to fine-tune your installation.
+
+Some of the configuration parameters are explained in the following paragraphs.
+
+### Mandatory parameters
+
+It is mandatory to define the parameters to connect ShaFi to the mysql database, using the next variables in `config.php`:
+
+```php
+// URL of the mysql server
+$db_servername = "";
+// Database to use for shafi
+$db_database = "";
+// Username with permissions to manipulate tables in the database
+$db_username = "";
+// Password for the user
+$db_password = "";
+```
+
+Moreover, it is mandatory to set the URL of the server that will host ShaFi, along with the endpoint of the ShaFi application. These values are defined using the following constants:
+
+```php
+// Server name (with http:// or https:// prefix)
+define('__SERVER_NAME', 'http://localhost');
+// Root URL for ShaFi
+define('__ROOT_URL', '/');
+```
+
+### Configuring the folder in which the files are stored
+
+Files uploaded to ShaFi need a storage folder. It is possible to define the folder in which to store them using the next constant:
+
+```php
+define('__STORAGE_BASE_FOLDER', './uploads');
+```
+
+The folder may be an absolute path or a path relative to the ShaFi main folder.
+
+**IMPORTANT:** The user that runs the web server needs writting permissions in that folder.
+
+### Disabling anonymous uploads
+
+The default configuration allows anonymous users to upload files to your ShaFi deployment. But if you do not want to open ShaFi to the world and you want to provide acccess only to your registered users, you can **disable anonymous** uploads. It can be disabled by including the next line in `config.php`:
+
+```php
+define('__ANONYMOUS_UPLOAD', false);
+```
+
+### Defining the maximum size for the uploaded files
+
+The maximum size for the uploaded files is controlled by including the next content in `config.php`:
+
+```php
+define('__MAX_FILESIZE', array(
+    '' => 1*1024*1024,
+    'u' => 10*1024*1024,
+    'a' => 100*1024*1024
+));
+```
+
+Each entry in the `__MAX_FILESIZE` array corresponds to a group of users. `''` is for **any** user (e.g. anonymous), `'u'` is the size for **registers users** and `'a'` is for **admin users**.
+
+### Defining the quota for the files of each group of users
+
+The maximum storage space that a user can have in ShaFi is controlled by quotas. It is possible to define a quota for each group of users. The quota is controlled by the following array:
+
+```php
+define('__STORAGE_QUOTA_GROUP', array(
+    'u' => 10*1024*1024,    // Quota for registered users
+    'a' => 100*1024*1024    // Quota for admin users
+));
+```
+
+**IMPORTANT:** The values defined here are _per user_ quota, not a shared quota. That means that _each user_ that belongs to a group will be able to use the whole storage space defined by the quota. In the example, each user in `'u'` group will be able to store 10 Mb.
+
+Quota for anonymous users can be controlled using the following constant:
+
+```php
+define('__STORAGE_QUOTA_ANONYMOUS', 10 * 1024 * 1024);
+````
+
+**NOTE:** There is a single `anonymous` user, so that quota limits the amount of storage space that can be used by the sum of files of any anonymous user.
+
+### Setting the token generation function
+
+The default behaviour of ShaFi is to generate unique ids for the tokens according to [this specification](https://tools.ietf.org/html/rfc4122). e.g.: http://shafi.myserver.com/9de61b5d-024e-4a8c-8682-a9876ac30aee
+
+These tokens are very long and _hard to spell_. It is possible to change the way that tokens are generated, by setting the function used to generate them.
+ShaFi includes an additional function that you can use. It is called `get_random_string` and it will generate short tokens, similar to those generated by goo.gl or bit.ly (e.g. http://shafi.myserver.com/9IjKIN9U). In order to use it, include the following definition in the `config.php` file:
+
+```php
+define('__TOKEN_GENERATOR_FUNCTION', 'get_random_string');
+```
+
+### Default expiration settings for tokens
+
+When an anoymous user uploads a file, ShaFi creates a token, and that token will expire after a period of time or a number of hits. The expiration settings are controlled using the following variable (time is expressed in seconds).
+
+```php
+// This example sets the expiration date to one week
+define('__ANONYMOUS_UPLOAD_DEFAULT_SECONDS', 60*60*24*7); 
+// It is a good idea to limit the amount of hits to avoid DoS
+define('__ANONYMOUS_UPLOAD_DEFAULT_HITS', 1000);
+```
+
+For registered users, if they do not set expiration conditions, ShaFi will create a default token. The values for the expiration conditions are controlled with the next constants:
+
+```php
+define('__DEFAULT_EXPIRATION_SECONDS', 60*60*24*7);
+define('__DEFAULT_EXPIRATION_HITS', null);
+```
+
+If any condition is disabled (i.e. set to null), the token will be considered to be infinite. If you do not want to allow infinite tokens in your ShaFi deployment, you can control it with the following constant:
+
+```php
+define('__ALLOW_INFINITE_TOKENS', false);
+```
+
+**IMPORTANT:**  If any of the settings is set to null, that condition will be disabled (e.g. limiting the time but not the hits).
+
+## Use cases
+
+### Creating a new group of users
+
+### Modifying the web content
+
+### Using an external authentication mechanism
 
 ## More on ShaFi
 
