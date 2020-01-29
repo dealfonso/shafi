@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Access to the MySQL database
+ *  IMPORTANT: this must be configured; otherwise ShaFi will not work
+ */
+// URL of the mysql server
+$db_servername = "";
+// Database to use for shafi
+$db_database = "";
+// Username with permissions to manipulate tables in the database
+$db_username = "";
+// Password for the user
+$db_password = "";
+
+/**
+ * URL of the ShaFi service
+ *  IMPORTANT: this must be configured; otherwise ShaFi will not work
+ */
+// Server name (with http:// or https:// prefix)
+define('__SERVER_NAME', 'http://localhost');
+// Root URL for ShaFi
+define('__ROOT_URL', '/');
+
+/**
+ * Default storage plugin (i.e. filesystem)
+ */
+// The folder in which the files are stored
+// define('__STORAGE_BASE_FOLDER', './uploads');
+
+/**
+ * Enable or disable non-expiring tokens (it is a bad idea to allow them)
+ */
+// define('__ALLOW_INFINITE_TOKENS', true);
+
+/**
+ * Default values for the automatic tokens for registered users (e.g. when not requested a token).
+ */
+// define('__DEFAULT_EXPIRATION_SECONDS', 60*60*24*7);
+// define('__DEFAULT_EXPIRATION_HITS', null);
+
+/**
+ * Anonymous uploads: this kind of users do not need to provide any credentials; somehow the free part of wetransfer.
+ */
+// Enable anonymous upload or not (if disabled will show a notice)
+// define('__ANONYMOUS_UPLOAD', true);
+
+// Default values for the tokens created by anonymous users (they cannot set these settings)
+// define('__ANONYMOUS_UPLOAD_DEFAULT_SECONDS', 60*60*24*7); 
+// define('__ANONYMOUS_UPLOAD_DEFAULT_HITS', null);             // Will be a good idea to limit the amount of hits to avoid DoS
+
+// Allow anonymous users to define passwords for their files (if set to false, already existing passwords will be kept)
+// define('__ANONYMOUS_PASSWORDS', false);
+
+/**
+ * Period after which an inactive file (file that has any token expired) expires (and can be deleted)
+ */
+// define('__GRACE_PERIOD', 60*60*24*7);
+
+/**
+ * Files sizes and quotas
+ */
+// Max file size. Have in mind that it must be compatible with "upload_max_filesize" in php.ini; -1 will not limit the filesize (will be controlled by php settings) or 0 to avoid file uploading or a specific group
+/*
+define('__MAX_FILESIZE', array(
+    '' => 1*1024*1024,      // Max filesize for *any* user (e.g. anonymous and any other user if not defined a quota for its groups)
+    'u' => 10*1024*1024,    // Max filesize for registered users
+    'a' => 100*1024*1024    // Max filesize of admin users
+));
+*/
+// Max storage quota for anonymous (this setting will avoid uncontrolled file upload); set to -1 to disable or 0 to avoid anonymous file uploading
+// define('__STORAGE_QUOTA_ANONYMOUS', 10 * 1024 * 1024);
+// Max storage quota for users in the defined groups
+// Max storage quota for each group ('u' for users, and 'a' for admins); -1 will disable the quota for the group and 0 will not allow to upload files. A user will have the bigger quota if belongs to multiple groups.
+/*
+define('__STORAGE_QUOTA_GROUP', array(
+    'u' => 10*1024*1024,
+    'a' => 100*1024*1024
+));
+*/
+?>
