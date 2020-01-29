@@ -92,7 +92,7 @@ class SHAFI_Op_UploadFile extends SHAFI_Op_Form {
                 return $this->add_error_message(__('Failed to get information about the file'));
                 
             // Now check for the quota
-            $existing_files = SHAFile::search(['owner' => $current_user->get_username(), 'path' => $fileinfo->path, '!state' => 'd' ]);
+            $existing_files = SHAFile::search(['owner' => $current_user->get_username(), 'path' => $fileinfo->path, '!state' => [ 'd', 'c', 'e' ] ]);
             if (sizeof($existing_files) > 0) {
                 // The file already exists in the system, and is owned by the user
                 $retval = $existing_files[0];
