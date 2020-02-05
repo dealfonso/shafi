@@ -13,6 +13,8 @@ function showmodal_delete(u) {
 function showmodal_create() {
   let mu = $('#modal_user');
   mu.find('#username').val('').prop('readonly', false);
+  mu.find('#password').val('');
+  mu.find('#passwordm').val('');
   mu.find('input[type="checkbox"]').prop('checked', false);
   mu.find('#userop').val('create').text("<?php _e('Create'); ?>");
   mu.modal('show');
