@@ -87,7 +87,7 @@ class SHAFI_Op_Users extends SHAFI_Op {
         global $current_user;
         $this->clear_messages();
 
-        if (isset($_POST['create'])) {
+        if (isset($_POST['userop']) && ($_POST['userop'] === 'create')) {
             $user = SHAUser::search(['username' => $_POST['username']]);
             if (sizeof($user) > 0)
                 return $this->add_error_message(__('User already exists'));
@@ -97,19 +97,58 @@ class SHAFI_Op_Users extends SHAFI_Op {
             } 
             else 
                 $_POST['password'] = null;
-            
+
+            $perm_s = "";
+            if (isset($_POST['perm'])) {
+                if (!is_array($_POST['perm'])) $_POST['perm'] = [ $_POST['perm']];
+                foreach ($_POST['perm'] as $p) {
+                    if (!isset(__PERMISSIONS[$p]))
+                        return $this->add_error_message(__('Invalid group'));
+                }
+                $perm_s = implode('', $_POST['perm']);
+            }
+
             $newuser = new SHAUser();
             $newuser->set_field('username', $_POST['username']);
             $newuser->set_password($_POST['password'], false);
-            if (isset($_POST['admin']))
-                $newuser->set_field('permissions', 'ua');
-            else
-                $newuser->set_field('permissions', 'u');
+            $newuser->set_field('permissions', $perm_s);
 
             if (! $newuser->create()) 
                 return $this->add_error_message(__('Failed to create user'));
 
             return $this->add_success_message(__('User has been successfully created'));
+        }
+        if (isset($_POST['userop']) && ($_POST['userop'] === 'update')) {
+            $user = SHAUser::search(['username' => $_POST['username']]);
+            if (sizeof($user) !== 1)
+                return $this->add_error_message(__('User does not exist'));
+            if ($_POST['password'] !== "") {
+                if ($_POST['password'] !== $_POST['passwordm']) 
+                    return $this->add_error_message(__('Passwords do not match'));
+            } 
+            else 
+                $_POST['password'] = null;
+
+            $user = $user[0];
+            $perm_s = "";
+            if (isset($_POST['perm'])) {
+                if (!is_array($_POST['perm'])) $_POST['perm'] = [ $_POST['perm']];
+                foreach ($_POST['perm'] as $p) {
+                    if (!isset(__PERMISSIONS[$p]))
+                        return $this->add_error_message(__('Invalid group'));
+                }
+                $perm_s = implode('', $_POST['perm']);
+            }
+
+            if ($_POST['password'] !== null)
+                if (! $user->set_password($_POST['password'], true))
+                    return $this->add_error_message(__('Failed to update user'));
+
+            $user->set_field('permissions', $perm_s);
+            if (! $user->save_i(['permissions'])) 
+                return $this->add_error_message(__('Failed to update user'));
+
+            return $this->add_success_message(__('User has been successfully updated'));
         }
         if (isset($_POST['deluser'])) {
             $user = SHAUser::search(['username' => $_POST['username']]);

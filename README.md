@@ -227,6 +227,29 @@ define('__ALLOW_INFINITE_TOKENS', false);
 
 ### Creating a new group of users
 
+In order to create your own groups, you can define a var `$__CUSTOM_GROUPS` in `config.php`. It is an array of groups, where the index is a single letter that represents the group.
+
+The are a set of legacy groups in ShaFi (defined as next):
+
+```php
+define('__LEGACY_PERMISSIONS', [
+    'l' => 'authorized',
+    'o' => 'owner',
+    'u' => 'user',
+    'a' => 'admin'
+])
+```
+
+As an example, if you wanted to define an additional group (e.g. "advanced users"), you could add the next code to `config.php`:
+
+```php
+$__CUSTOM_GROUPS = [
+    'A' => 'advanced users`
+]
+```
+
+Then you can use the keys of the groups to define other limits (e.g. quotas, maximum sizes, etc.).
+
 ### Modifying the web content
 
 ### Using an external authentication mechanism

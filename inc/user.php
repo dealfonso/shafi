@@ -17,11 +17,17 @@ class SHAFI_User extends Object_ROProps {
     }
 }
 
-define('__PERMISSIONS', [
-    'l' => 'autorizado', // Special permissions
-    'o' => 'propietario', // Special permissions
-    'u' => 'usuario', 'a' => 'admin' // Custom groups
-]);
+$__LEGACY_PERMISSIONS = [
+    'l' => __('authorized'), // Special permissions
+    'o' => __('owner'), // Special permissions
+    'u' => __('user'), 
+    'a' => __('admin') // Custom groups
+];
+
+if (! isset($__CUSTOM_GROUPS))
+    $__CUSTOM_GROUPS = [];
+
+define('__PERMISSIONS', $__LEGACY_PERMISSIONS + $__CUSTOM_GROUPS);
 
 class SHAUser extends SCPM_DBObject {
     protected static $db_tablename = 'users';
