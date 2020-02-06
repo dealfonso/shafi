@@ -11,6 +11,8 @@ class Router {
         $this->_executed = false;
         $this->_last_result = null;
         $this->_last_handler = null;
+        $this->_view_precall = null;
+        $this->_view_postcall = null;
         $this->static_folders = array();
     }
 
@@ -21,6 +23,15 @@ class Router {
     public function add_post_callback($call) {
         $this->_postcall = $call;
     }
+
+    public function add_view_pre_callback($call) {
+        $this->_view_precall = $call;
+    }
+
+    public function add_view_post_callback($call) {
+        $this->_view_postcall = $call;
+    }
+
 
     public function add_static_folder($folder) {
         if (!in_array($folder, $this->static_folders))
@@ -138,7 +149,7 @@ class Router {
         }
 
         if (is_callable($this->_postcall)) {
-            $result = call_user_func_array($this->_postcall, [ $op_o, $op ] );
+            $result = call_user_func_array($this->_postcall, [ $route, $op, $op_o ] );
             if ($result === false) return false;
         }
     
@@ -153,7 +164,7 @@ class Router {
      * @param route the route to be called
      * @param op the opereation to be called
      */
-    public function view($route, $op) {
+    public function view($route, $op_o) {
         $static_route = $this->is_static($route);
 
         // skip executing on static routes
@@ -162,9 +173,13 @@ class Router {
             return false;
         }
 
-
-        $op = $this->_effective_route($route, $op);
+        $op = $this->_effective_route($route, $op_o);
         if ( $op === false) return false;
+
+        if (is_callable($this->_view_precall)) {
+            $result = call_user_func_array($this->_view_precall, [ $route, $op_o, $op ] );
+            if ($result !== null) echo $result;
+        }
 
         if (is_callable($op['view'])) {
             $result = call_user_func_array($op['view'], [ $this->_last_handler, $this->_last_result, $op ] );
@@ -177,5 +192,10 @@ class Router {
         // "$handler" will be usable INSIDE the script, and so it will be usable "$op"
         $handler = $this->_last_handler;
         include_once($op['view']);
+
+        if (is_callable($this->_view_postcall)) {
+            $result = call_user_func_array($this->_view_postcall, [ $route, $op_o, $op ] );
+            if ($result !== null) echo $result;
+        }
     }
 }

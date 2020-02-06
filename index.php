@@ -54,7 +54,7 @@
     // WARNING: means that these files will be included INSIDE the template
     $router->add_static_folder('static');
 
-    $router->add_post_callback(function($op_o, $op) {
+    $router->add_post_callback(function($route, $op, $op_o) {
         global $__messages;
         if ($op_o !== null)
             $__messages = $op_o->messages;
