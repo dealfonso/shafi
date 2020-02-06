@@ -4,6 +4,8 @@ if ( ! defined( '__SHAFI_FOLDER' ) ) {
     exit; // Exit if accessed directly
 }
 
+require_once(__SHAFI_INC . 'ops.php');
+
 /**
  * Class to manage LOGIN operation. This class may be specialized to link to any authentication system
  */
