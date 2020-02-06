@@ -11,6 +11,16 @@ class SHAFI_Op_Login extends SHAFI_Op {
     protected $op = 'login';
     const PERMS=[ 'login' ];
 
+    protected function _login($username, $url = null) {
+        session_regenerate_id();
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $username;
+        if ($url === null)
+            $url = add_query_var(['op' => null, 'id' => null], get_root_url());
+        header(sprintf('Location: %s', $url));
+        die();            
+    }
+
     public function _do() {
         global $current_user;
         $this->clear_messages();
@@ -27,11 +37,7 @@ class SHAFI_Op_Login extends SHAFI_Op {
             if ( ! $user->check_password($_POST['password'])) 
                 return $this->add_error_message(__('Invalid password'));
 
-            session_regenerate_id();
-            $_SESSION['loggedin'] = true;
-            $_SESSION['username'] = $_POST['username'];
-            header(sprintf('Location: %s', add_query_var(['op' => null, 'id' => null], get_root_url())));
-            die();            
+            return $this->_login($_POST['username']);
         }
         return false;
     }

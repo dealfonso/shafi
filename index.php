@@ -8,6 +8,8 @@
     require_once(__SHAFI_INC . 'i18n.php');
     require_once(__SHAFI_INC . 'debug.php');
     require_once(__SHAFI_FOLDER . 'defaultconfig.php');
+    require_once(__SHAFI_INC . 'ops.php');
+
     require_once(__SHAFI_INC . 'notice.php');
     require_once(__SHAFI_INC . 'roprops.php');
     require_once(__SHAFI_INC . 'helpers.php');
@@ -15,10 +17,12 @@
     require_once(__SHAFI_INC . 'token.php');
     require_once(__SHAFI_INC . 'user.php');
     require_once(__SHAFI_INC . 'storage.php');
-    require_once(__SHAFI_INC . 'ops.php');
     require_once(__SHAFI_INC . 'list.php');
     require_once(__SHAFI_INC . 'router.php');
     require_once(__SHAFI_INC . 'quota.php');
+
+    if (!defined(__CUSTOM_ROUTES))
+        define('__CUSTOM_ROUTES', null);
 
     // TODO:
     // - enable mail sending of links
@@ -91,6 +95,9 @@
 
         $router->add('admin', 'login', 'SHAFI_Op_Login', 'templates/login.php');
     }
+
+    if (is_callable(__CUSTOM_ROUTES))
+        call_user_func_array(__CUSTOM_ROUTES, [ $router ]);
 
     $router->exec($token, $op);
 ?>

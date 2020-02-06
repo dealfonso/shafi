@@ -13,6 +13,10 @@
         return rtrim(__ROOT_URL, '/') . '/';
     }
 
+    function get_rel_url($url) {
+        return rtrim(__ROOT_URL, '/') . '/' . ltrim($url, '/');
+    }
+
     function sanitize_text($text) {
         return preg_replace('/[^a-z0-9]+/', '-', strtolower( $text ));
     }

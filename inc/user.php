@@ -87,16 +87,16 @@ class SHAUser extends SCPM_DBObject {
         return true;
     }        
 }
-
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin']) {
     $current_user = SHAUser::search([ 'username' => $_SESSION['username']]);
-    if (sizeof($current_user) !== 1)
-        $current_user = new SHAUser();        
+    if (sizeof($current_user) !== 1) {
+        session_destroy();
+        $current_user = new SHAUser();
+    }
     else
         $current_user = $current_user[0];
-} else {
-    $current_user = new SHAUser();    
-}
+} else 
+    $current_user = new SHAUser();
 
 class ACLManager {
 
