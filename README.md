@@ -254,6 +254,40 @@ Then you can use the keys of the groups to define other limits (e.g. quotas, max
 
 ### Using an external authentication mechanism
 
+In order to use an external authentication mechanism (e.g. Google or any type of SSO), you can create a custom login class and then login into ShaFi.
+
+E.g. Rediris SSO is an external authentication identity, and the following class integrates it with ShaFi as an external identity validation. It works as follows:
+
+1. User is redirected to `/auth` web page, which is associated to `SHAFI_Op_External_Auth`.
+1. Method `authenticate` manages the authentication (redirecting to the appropriate login server, etc.).
+1. Once authenticated, the same `authenticate` redirects to `/auth` again.
+1. Finally, method `get_authenticated_user` returns the login username for the authenticated user (or `null`, if none).
+
+The class that implements such behavior is the next:
+
+```php
+class SHAFI_Op_External_Auth extends SHAFI_Op_Login {
+    public function _do() {
+        global $current_user;
+        if ($current_user->is_logged_in())
+            return $this->add_error_message(__("User is already logged in"));
+        $eauth = new ExternalAuth();
+        $login = $eauth->get_authenticated_user();
+        if ($login !== null) {
+            $user = SHAUser::search([ 'username' => $login]);
+            if (sizeof($user) !== 1) {
+                session_destroy();
+                $user = new SHAUser();
+            }
+            else
+                return $this->_login($login);
+        }
+        return $this->add_error_message($eauth->authenticate(add_query_var(['op' => null, 'id' => null], get_rel_url('/auth'))));
+    }
+```
+
+> Method `authenticate` will only return if an error happens.
+
 ## More on ShaFi
 
 ### Some technical features
