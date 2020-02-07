@@ -67,6 +67,11 @@
             return in_array($this->state, ['a', 'g', 'p']);
         }
 
+        public function is_downloadable() {
+            // The file can be downloaded unless it is being processed or it is deleted
+            return in_array($this->state, ['a', 'g', 'c', 'e']);
+        }
+
         public function create_token($exp_seconds, $exp_hits, $passwd) {
             $token = new SHAToken();
             $token->set_limits($exp_seconds, $exp_hits);

@@ -14,12 +14,12 @@ class SHAFI_Op_DownloadFile extends SHAFI_Op_File {
             header("HTTP/1.0 404 Not Found");
             return $this->add_error_message(__('File not found'));
         }
-        if ($this->file->is_active()) {
+        if ($this->file->is_downloadable()) {
             global $storage_backend;
             return $storage_backend->retrieve($this->file->get_fileinfo());
         } else {
             header("HTTP/1.0 404 Not Found");
-            return $this->add_error_message(__('File is not active'));
+            return $this->add_error_message(__('File cannot be downloaded'));
         }
     }
 }

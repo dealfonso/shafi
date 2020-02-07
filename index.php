@@ -21,9 +21,6 @@
     require_once(__SHAFI_INC . 'router.php');
     require_once(__SHAFI_INC . 'quota.php');
 
-    if (!defined(__CUSTOM_ROUTES))
-        define('__CUSTOM_ROUTES', null);
-
     // TODO:
     // - enable mail sending of links
 
@@ -96,7 +93,7 @@
         $router->add('admin', 'login', 'SHAFI_Op_Login', 'templates/login.php');
     }
 
-    if (is_callable(__CUSTOM_ROUTES))
+    if (defined('__CUSTOM_ROUTES') && (is_callable(__CUSTOM_ROUTES)))
         call_user_func_array(__CUSTOM_ROUTES, [ $router ]);
 
     $router->exec($token, $op);
