@@ -6,7 +6,7 @@
         <h3><?php _e('Available files') ?></h3>
         <?php
         global $current_user;
-        if ($show_all_users) {
+        if (isset($show_all_users) && ($show_all_users == true)) {
             // This is the unique moment in which a file in 'd' state can be shown
             $files = SHAFile::search([], false, 'AND', 'time');
         } else {
@@ -45,7 +45,7 @@
                 'function' => function($o) { /* we need to force the change of the state if it was processing */ $o->is_processing(); return __STATE[$o->get_field('state')]; }, 
             )
         );
-        if ($show_all_users) {
+        if (isset($show_all_users) && ($show_all_users == true)) {
             $fields = $fields + [ 'owner' => __('Owner') ];
         }
         $list = new DDN_List(
