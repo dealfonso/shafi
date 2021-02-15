@@ -79,7 +79,7 @@
                     );
 
                     array_push($config_lines, 
-                        "define('__ANONYMOUS_UPLOAD', '" . ($info['enableanonymous'] === null?"false":"true") . "');"
+                        "define('__ANONYMOUS_UPLOAD', " . ($info['enableanonymous'] === null?"false":"true") . ");"
                     );
                     
                     $htaccess = array(
