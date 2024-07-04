@@ -11,7 +11,7 @@
     function value($v) {
         global $info;
         if (isset($_POST[$v]) && ($_POST[$v] != '')) {
-            echo "value='${_POST[$v]}'";
+            echo "value='{$_POST[$v]}'";
         }
     }
 
@@ -45,7 +45,7 @@
         $db_database = $info['dbname']; 
         $db_tables_prefix = "";
 
-        require_once('../inc/db.php');
+        require_once('inc/db.php');
         require_once(__SHAFI_INC . '/dbcreation.php');
 
         if ($wpdb !== null) {
@@ -69,13 +69,13 @@
 
                     $config_lines = array(
                     "<?php",
-                    "\$db_servername='${info['dbhost']}';",
-                    "\$db_database='${info['dbname']}';",
-                    "\$db_username='${info['dbuser']}';",
-                    "\$db_password='${info['dbpassword']}';",
-                    "define('__STORAGE_BASE_FOLDER', '${info['storageroot']}');",
-                    "define('__SERVER_NAME', '${info['servername']}');",
-                    "define('__ROOT_URL', '${info['rooturl']}');"
+                    "\$db_servername='{$info['dbhost']}';",
+                    "\$db_database='{$info['dbname']}';",
+                    "\$db_username='{$info['dbuser']}';",
+                    "\$db_password='{$info['dbpassword']}';",
+                    "define('__STORAGE_BASE_FOLDER', '{$info['storageroot']}');",
+                    "define('__SERVER_NAME', '{$info['servername']}');",
+                    "define('__ROOT_URL', '{$info['rooturl']}');"
                     );
 
                     array_push($config_lines, 
@@ -85,7 +85,7 @@
                     $htaccess = array(
                     "<IfModule mod_rewrite.c>",
                     "RewriteEngine On",
-                    "RewriteBase ${info['rooturl']}",
+                    "RewriteBase {$info['rooturl']}",
                     "RewriteRule ^index\.php$ - [L]",
                     "RewriteRule ^favicon\.ico$ - [L]",
                     "RewriteCond %{REQUEST_FILENAME} -f",

@@ -95,7 +95,7 @@
                 $prefix = "";
                 if ($domain !== "") $prefix = "$domain-";
                 $lang_f = str_replace('-', '_', $lang);
-                $translator = Translator::createFromTranslations( $loader->loadFile($domain_data['path'] . "/${prefix}${lang_f}.po"));
+                $translator = Translator::createFromTranslations( $loader->loadFile($domain_data['path'] . "/{$prefix}{$lang_f}.po"));
             } else 
                 $translator = new Translator();
 

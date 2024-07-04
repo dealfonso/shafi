@@ -4,7 +4,7 @@
         <h1 class="display-4"><?php _e('Oooooops!') ?></h1>
         <p class="lead"><?php _e('We are sorry to inform that an error has occurred') ?></p>
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="javascript:history.go(-1);" role="button">Volver</a>
+            <a class="btn btn-primary btn-lg" href="<?php echo add_query_var([], '/') ?>" role="button"><?php _e("Home") ?></a>
         </p>
     </div>
 </div>

@@ -1,6 +1,11 @@
 <?php
 
 class DDN_Notice {
+
+    private $message;
+    private $type;
+    private $dismissible;
+    
     public function __construct($message, $type = "info", $dismissible = true) {
         $this->message = $message;
         $this->type = $type;

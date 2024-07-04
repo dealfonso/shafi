@@ -1,6 +1,8 @@
 <?php
 
 class DebugInfo {
+    public $debug;
+
     public function __construct() {
         $this->debug = array();
     }

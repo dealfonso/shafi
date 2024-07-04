@@ -4,6 +4,16 @@ class Router {
     const __ALL_ROUTES = '_ANY_OTHER_ROUTE_';
     const __ALL_OPS = '_ANY_OTHER_OP_';
 
+    private $_routes;
+    private $_precall;
+    private $_postcall;
+    private $_executed;
+    private $_last_result;
+    private $_last_handler;
+    private $_view_precall;
+    private $_view_postcall;
+    public $static_folders;
+
     public function __construct() {
         $this->_routes = [];
         $this->_precall = null;

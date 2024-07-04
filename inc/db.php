@@ -247,7 +247,7 @@ class DB extends Object_ROProps {
         for ($i = 0; $i < sizeof($markers_a); $i++)
             array_push($set_a, sprintf("%s = %s", $fields_a[$i], $markers_a[$i]));
 
-        $query_str = "UPDATE `$table` SET " . implode($set_a, ' , ');
+        $query_str = "UPDATE `$table` SET " . implode(' , ', $set_a);
 
         // Now build where
         list($where_s, $types_w_s, $values_w_a) = $this->_p_build_where($where, 'AND');

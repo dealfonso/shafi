@@ -38,6 +38,14 @@ class DDN_List {
                 and offset page should be 2.
 
     */
+
+    private $objects;
+    private $columns;
+    private $pagesize;
+    private $totalpages;
+    private $offsetpages;
+    private $_title_field;
+    
     public function __construct($objects, $columns, $pagesize= 0, $totalpages = -1, $offsetpages = 0 /** not implemented */) {
         $this->objects = $objects;
         $this->columns = $columns;

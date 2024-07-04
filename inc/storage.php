@@ -51,6 +51,10 @@ class StorageBackend {
 }
 
 class StorageFileSystem extends StorageBackend {
+
+    private $base_path;
+    private $secret;
+
     public function __construct($base_path = '.', $secret = '') {
         $this->base_path = rtrim($base_path, '/');
         $this->secret = $secret;
