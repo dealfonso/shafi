@@ -279,7 +279,7 @@ $ apachectl restart
                                 <h3>Anonymous uploads</h3>
                                 <div class="form-group">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="enableanonymous" id="enableanonymous" value="yes" <?php echo ($info['enableanonymous']===null?"":"checked"); ?>
+                                        <input type="checkbox" class="form-check-input" name="enableanonymous" id="enableanonymous" value="yes" <?php echo ($info['enableanonymous']===null?"":"checked"); ?>>
                                         <label class="form-check-label" for="enableanonymous">Enable anonymous upload</label>
                                     </div>                  
                                 </div>              
