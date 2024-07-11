@@ -155,6 +155,7 @@ function showmodal_renew(v, t) {
                 }                            
             )
         );
+        $list->sort('oid', 'asc');
         echo $list->render('sortable');
         ?>
 
