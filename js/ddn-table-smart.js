@@ -87,7 +87,7 @@ $(document).ready(function($) {
 
         table._create_filter = function() {
             this.before(
-                $('<input class="ddn-table-filter" type="search" placeholder="Filter..."></input>').on('keyup', function() {
+                $('<input class="ddn-table-filter form-control" type="search" placeholder="Filter..."></input>').on('keyup', function() {
                     table.filter($(this).val());
                     table.paginate();
                 })

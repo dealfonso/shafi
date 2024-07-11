@@ -4,21 +4,15 @@ if ($handler->token_created === null) {
 ?>
 <div class="col-md-6 offset-md-3 v-center text-center">
     <form id="fileuploaded" action="<?php echo add_query_var(['op' => null ], __LEGACY_UPLOAD_URL); ?>" method="POST" enctype="multipart/form-data">
-        <div class="custom-file">
-            <input required="true" type="file" class="custom-file-input" id="fichero" name="fichero">
-            <label class="custom-file-label" for="customFile"><?php _e('Select file') ?></label>
-        </div>                    
-        <p></p>
-        <p class="small">(*) <?php _e('A new link will be created. It will expire in a few days.') ?></p>
+        <input required="true" type="file" class="form-control" id="fichero" name="fichero">
+        <p class="small mt-1">(*) <?php _e('A new link will be created. It will expire in a few days.') ?></p>
         <?php if (__ANONYMOUS_PASSWORDS) { ?>
             <div class="collapsible closed" opened-text='<?php _e('simple') ?> <i class="fas fa-angle-up"></i>' closed-text='<?php _e('advanced') ?> <i class="fas fa-angle-down"></i>' >
                 <div class="content">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox" name="setpasswd" id="setpasswd">
-                                <span><?php _e('Set password') ?></span>
-                            </div>
+                        <div class="input-group-text">
+                            <input type="checkbox" name="setpasswd" id="setpasswd">
+                            <span><?php _e('Set password') ?></span>
                         </div>
                         <input type="password" class="form-control"  maxlength="255" id="password" name="password" disabled>
                     </div>

@@ -23,6 +23,7 @@ class SHAFI_Op_Form extends SHAFI_Op {
                 switch ($_POST['units']) {
                     case 's': $multiplier = 1; break;
                     case 'm': $multiplier = 60; break;
+                    case 'h': $multiplier = 60*60; break;
                     case 'd': $multiplier = 60*60*24; break;
                     case 'M': $multiplier = 60*60*24*30; break;
                     case 'a': $multiplier = 60*60*24*365; break;
