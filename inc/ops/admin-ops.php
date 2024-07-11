@@ -172,3 +172,82 @@ class SHAFI_Op_Users extends SHAFI_Op {
         return false;
     }
 }
+
+class SHAFI_Op_Google_Auth extends SHAFI_Op_Login {
+    public function google_auth() {
+        if (isset($_GET['code']) && !empty($_GET['code'])) {
+
+            // Execute cURL request to retrieve the access token
+            $params = [
+                'code' => $_GET['code'],
+                'client_id' => __GOOGLE_CLIENT_ID,
+                'client_secret' => __GOOGLE_CLIENT_SECRET,
+                'redirect_uri' => __GOOGLE_REDIRECT_URI,
+                'grant_type' => 'authorization_code'
+            ];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://accounts.google.com/o/oauth2/token');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            $response = json_decode($response, true);
+            // Make sure access token is valid
+            if (isset($response['access_token']) && !empty($response['access_token'])) {
+                // Execute cURL request to retrieve the user info associated with the Google account
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, 'https://www.googleapis.com/oauth2/' . __GOOGLE_OAUTH_VERSION . '/userinfo');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $response['access_token']]);
+                $response = curl_exec($ch);
+                curl_close($ch);
+                $profile = json_decode($response, true);
+                // Make sure the profile data exists
+                if (isset($profile['email'])) {
+                    return [ true, $profile['email'] ];
+                } else {
+                    return [ false, __("Could not retrieve profile information! Please try again later!")];
+                }
+            } else {
+                return [ false, __("Invalid access token! Please try again later!") ];
+            }
+        } else {
+            // Define params and redirect to Google Authentication page
+            $params = [
+                'response_type' => 'code',
+                'client_id' => __GOOGLE_CLIENT_ID,
+                'redirect_uri' => __GOOGLE_REDIRECT_URI,
+                // We only requested the e-mail, but could request more data (see https://developers.google.com/identity/protocols/oauth2/scopes)
+                'scope' => 'https://www.googleapis.com/auth/userinfo.email',
+                'access_type' => 'offline',
+                'prompt' => 'consent'
+            ];
+            header('Location: https://accounts.google.com/o/oauth2/auth?' . http_build_query($params));
+            die();
+        }        
+    }
+
+    public function _do() {
+        global $current_user;
+        $this->clear_messages();
+
+        if ($current_user->is_logged_in())
+            return $this->add_error_message(__("User is already logged in"));
+
+        [ $success, $login ] = $this->google_auth();
+
+        if ($login !== null) {
+            $user = SHAUser::search([ 'username' => $login]);
+            if (sizeof($user) !== 1) {
+                session_destroy();
+                $user = new SHAUser();
+                return $this->add_error_message(__("User does not exist"));
+            }
+            else
+                return $this->_login($login);
+        }
+
+        return $this->add_error_message($login);
+    }
+}

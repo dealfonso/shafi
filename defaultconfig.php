@@ -10,6 +10,24 @@ if (!defined('__STORAGE_FILESYSTEM_SECRET'))
     define('__STORAGE_FILESYSTEM_SECRET', 'ao8n47clia3ucwk');
 
 /**
+ * Integrate with Google Auth
+ */
+if (!defined('__GOOGLE_CLIENT_ID'))
+    define('__GOOGLE_CLIENT_ID', 'INSERT-YOUR-GOOGLE-CLIENT-ID-HERE');
+if (!defined('__GOOGLE_CLIENT_SECRET'))
+    define('__GOOGLE_CLIENT_SECRET', 'INSERT-YOUR-GOOGLE-CLIENT-SECRET-HERE');
+if (!defined('__GOOGLE_REDIRECT_URI'))
+    define('__GOOGLE_REDIRECT_URI', 'http://localhost:8000/auth-google');
+if (!defined('__GOOGLE_OAUTH_VERSION'))
+    define('__GOOGLE_OAUTH_VERSION', 'v3');
+
+/**
+ * The number of requests that the background will be kept the same (i.e. after this number, a new BG will be generated)
+ */
+if (!defined('__SHAFI_BG_REFRESH_RATE'))
+    define('__SHAFI_BG_REFRESH_RATE', 5);
+
+/**
  * Period after which an inactive file (file that has any token expired) expires (and can be deleted)
  */
 if (!defined('__GRACE_PERIOD'))
