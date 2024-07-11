@@ -36,12 +36,14 @@ class SHAUser extends SCPM_DBObject {
     const FIELDS = [
         'username',
         'password',
-        'permissions'
+        'permissions',
+        'email'
     ];
 
     protected $username = null;
     protected $password = null;
     protected $permissions = null;
+    protected $email = null;
     protected $loggedin = false;
 
     public function is_logged_in() {

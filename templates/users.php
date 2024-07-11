@@ -40,6 +40,7 @@ function showmodal_update(username, perm_s) {
       <form method=post oninput='passwordm.setCustomValidity(password.value != passwordm.value ? "<?php _e('Passwords do not match') ?>" : "")'>
       <div class="modal-body">
         <p><input type="text" required="true" class="form-control" name='username' id="username" placeholder="<?php _e('User name') ?>"></p>
+        <p><input type="email" class="form-control" name="email" id="email" placeholder="<?php _e('e-mail') ?>"></p>
         <p><input type="password" validate-match="passwordm" class="form-control" name='password' id="password" placeholder="<?php _e('New password') ?>"></p>
         <p><input type="password" class="form-control" name='passwordm' id="passwordm" placeholder="<?php _e('Confirm password') ?>"></p>
         <p>

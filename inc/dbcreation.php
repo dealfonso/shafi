@@ -58,6 +58,7 @@ function create_db() {
     CREATE TABLE IF NOT EXISTS $db_users_table_name (
         id bigint NOT NULL AUTO_INCREMENT,
         username varchar(32) NOT NULL,
+        email varchar(255) DEFAULT NULL,
         password varchar(255) DEFAULT NULL,
         permissions varchar(5) DEFAULT 'u',
         PRIMARY KEY (id), UNIQUE (username)
