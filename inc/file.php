@@ -40,6 +40,7 @@
         protected $path = null;
         protected $state = 'p';
         protected $size = 0;
+        protected $stid = null;
 
         public function __construct($id = null) {
             parent::__construct("file", $id);
