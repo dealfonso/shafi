@@ -53,9 +53,7 @@ function showmodal_renew(v, t) {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"><?php _e('Create new token') ?></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       <span class="placeholder"></span>
@@ -66,7 +64,7 @@ function showmodal_renew(v, t) {
       <div class="modal-footer">
         <form method="POST">
             <input type="hidden" id="token" name="token">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _e('Cancel') ?></button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Cancel') ?></button>
             <button type="submit" class="btn btn-primary" name="create" id="submitbutton"><?php _e('Create') ?></button>
         </form>
       </div>

@@ -144,7 +144,7 @@
 
             $router->add('', 'download', 'SHAFI_Op_DownloadFile', 'templates/error.php');
             $router->add('', 'edit', 'SHAFI_Op_Edit', 'templates/edit.php');
-            $router->add('admin', null, 'SHAFI_Op_Setpass', 'templates/userinfo.php');
+            $router->add('admin', null, 'SHAFI_Op_UpdateProfile', 'templates/userinfo.php');
             $router->add('admin', 'list', 'SHAFI_Op_List', 'templates/list.php');
             $router->add('admin', 'logout', 'SHAFI_Op_Logout', 'templates/error.php');
             $router->add('admin', 'del', 'SHAFI_Op_DeleteFile', 'templates/error.php');
@@ -179,16 +179,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Share Files (ShaFi)</title>
-        <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous"> -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.2.1/font-awesome-animation.min.css">
         <link rel="stylesheet" href="<?php echo get_root_url() ?>css/notice.css">
         <link rel="stylesheet" href="<?php echo get_root_url() ?>css/ddn-table-smart.css">
         <link rel="stylesheet" href="<?php echo get_root_url() ?>css/shafi.css">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>-->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>         -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
         <script src="<?php echo get_root_url() ?>js/notice.js"></script>
         <script src="<?php echo get_root_url() ?>js/ddn-table-smart.js"></script>
@@ -282,4 +282,9 @@
             <?php } ?>
         </div>
     </body>
+    <script>
+        $(function() {
+            $('.modal').appendTo('body');
+        })
+    </script>
 </html>

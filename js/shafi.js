@@ -4,9 +4,9 @@ $(function () {
     function enable_hours() {
         var checked = $('#exp_time').prop('checked');
         if ((checked)&&($('#hours').val()=='-1'))
-            $('#custom_expiry_time').show();
+            $('#custom_expiry_time').removeClass('d-none').show();
         else
-            $('#custom_expiry_time').hide();
+            $('#custom_expiry_time').addClass('d-none').hide();
     }
     $('#hours').on('change', function() {
         enable_hours();

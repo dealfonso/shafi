@@ -15,14 +15,16 @@ function showmodal_create() {
   mu.find('#username').val('').prop('readonly', false);
   mu.find('#password').val('');
   mu.find('#passwordm').val('');
+  mu.find('#email').val('');
   mu.find('input[type="checkbox"]').prop('checked', false);
   mu.find('#userop').val('create').text("<?php _e('Create'); ?>");
   mu.modal('show');
   return mu;
 }
-function showmodal_update(username, perm_s) {
+function showmodal_update(username, email, perm_s) {
   let mu = showmodal_create();
   mu.find('#username').val(username).prop('readonly', true);
+  mu.find('#email').val(email);
   Array.from(perm_s).forEach((p) =>mu.find(`input[type="checkbox"][value="${p}"]`).prop('checked', true))
   mu.find('#userop').val('update').text("<?php _e('Update'); ?>");
 }
@@ -33,9 +35,7 @@ function showmodal_update(username, perm_s) {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"><?php _e('Create user') ?></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form method=post oninput='passwordm.setCustomValidity(password.value != passwordm.value ? "<?php _e('Passwords do not match') ?>" : "")'>
       <div class="modal-body">
@@ -59,7 +59,7 @@ function showmodal_update(username, perm_s) {
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php _e('Cancel') ?></button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php _e('Cancel') ?></button>
         <button type="submit" class="btn btn-primary" name="userop" id="userop" value="create"><?php _e('Create') ?></button>
       </div>
       </form>
@@ -85,14 +85,16 @@ function showmodal_update(username, perm_s) {
                     return implode(', ', $perms); 
                 }, 
             ),
+            "email" => __('Email'),
             "_buttons" => function($o) {
                 $username = $o->get_username();
                 $perms_s = $o->get_field('permissions');
-                
+                $email = $o->get_field('email');
+
                 // shafi user cannot be deleted (because he is the default admin)
                 if ($username !== 'shafi') {
                     return 
-                    '<a class="control" href="javascript:showmodal_update(\''. $username . '\', \''. $perms_s . '\')";><i class="fas fa-user-edit"></i></a>' . 
+                    '<a class="control" href="javascript:showmodal_update(\''. $username . '\', \''. $email . '\',  \''. $perms_s . '\')";><i class="fas fa-user-edit"></i></a>' . 
                     '<a class="control" href="javascript:showmodal_delete(\''. $username . '\')";><i class="fas fa-times"></i></a>';
                 }
                 return '';

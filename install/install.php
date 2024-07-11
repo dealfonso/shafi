@@ -141,7 +141,7 @@ $(function () {
                                 <li>Create an admin user for ShaFi, in its tables (with the provided credentials)</li>
                                 <li>Generate the configuration files needed, according to your installation (they will not be written to disk unless you mark the corresponding checkboxes)</li>
                                 </ul>
-                                <p class="text-center"><button data-dismiss="alert" role="button" aria-expanded="true" class="btn btn-danger btn-lg">Acknowledge</button></p>
+                                <p class="text-center"><button data-bs-dismiss="alert" role="button" aria-expanded="true" class="btn btn-danger btn-lg">Acknowledge</button></p>
                             </div>
                             <?php
                             if (sizeof($config_lines) > 0) {

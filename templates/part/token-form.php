@@ -1,11 +1,9 @@
 <div class="input-group">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <input type="checkbox" name="exp_time" id="exp_time">
-            <span><?php _e('Expire in') ?></span>
-        </div>
+    <div class="input-group-text">
+        <input class="form-check-input" type="checkbox" name="exp_time" id="exp_time">
+        <span><?php _e('Expire in') ?></span>
     </div>
-    <select class="custom-select" id="hours" name="hours" disabled>
+    <select class="form-select" id="hours" name="hours" disabled>
         <option value="1">1 <?php _e('hour') ?></option>
         <option value="2">2 <?php _e('hours') ?></option>
         <option value="3">3 <?php _e('hours') ?></option>
@@ -25,42 +23,31 @@
 </div>
 <div class="input-group d-none" id="custom_expiry_time">
     <input type="number" min=1 class="form-control" name="seconds" id="seconds" value="60">
-    <div class="input-group-append btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-outline-secondary active">
-            <input type="radio" name="units" id="option1" value="s">sec.
-        </label>
-        <label class="btn btn-outline-secondary">
-            <input type="radio" name="units" id="option2" value="m" checked><?php _e('minutes') ?>
-        </label>
-        <label class="btn btn-outline-secondary">
-            <input type="radio" name="units" id="option3" value="d"><?php _e('days') ?>
-        </label>
-        <label class="btn btn-outline-secondary">
-            <input type="radio" name="units" id="option4" value="M"><?php _e('months') ?>
-        </label>
-        <label class="btn btn-outline-secondary">
-            <input type="radio" name="units" id="option5" value="a"><?php _e('days') ?>
-        </label>
+    <div class="input-group-text">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <input type="radio" class="btn-check" name="units" id="option1" autocomplete="off" value="s" checked>
+        <label class="btn btn-outline-secondary" for="option1"><?php _e("sec."); ?></label>
+        <input type="radio" class="btn-check" name="units" id="option2" autocomplete="off" value="m">
+        <label class="btn btn-outline-secondary" for="option2"><?php _e("min."); ?></label>
+        <input type="radio" class="btn-check" name="units" id="option3" autocomplete="off" value="h">
+        <label class="btn btn-outline-secondary" for="option3"><?php _e("hours"); ?></label>
+        <input type="radio" class="btn-check" name="units" id="option4" autocomplete="off" value="d">
+        <label class="btn btn-outline-secondary" for="option4"><?php _e("days"); ?></label>
     </div>  
+    </div>
 </div>
 <div class="input-group">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <input type="checkbox" name="exp_hits" id="exp_hits">
-            <span><?php _e('Expire after') ?></span>
-        </div>
+    <div class="input-group-text">
+        <input class="form-check-input" type="checkbox" name="exp_hits" id="exp_hits">
+        <span><?php _e('Expire after') ?></span>
     </div>
     <input type="number" min=1 id="hitcount" name="hitcount" class="form-control" value="10" disabled>
-    <div class="input-group-append">
-        <span class="input-group-text"><?php _e('hits') ?></span>
-    </div>
+    <span class="input-group-text"><?php _e('hits') ?></span>
 </div>  
 <div class="input-group">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <input type="checkbox" name="setpasswd" id="setpasswd">
-            <span><?php _e('Set password') ?></span>
-        </div>
+    <div class="input-group-text">
+        <input class="form-check-input" type="checkbox" name="setpasswd" id="setpasswd">
+        <span><?php _e('Set password') ?></span>
     </div>
     <input type="password" class="form-control"  maxlength="255" id="password" name="password" disabled>
 </div>

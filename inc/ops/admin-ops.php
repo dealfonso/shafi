@@ -64,25 +64,35 @@ class SHAFI_Op_Logout extends SHAFI_Op {
     }
 }
 
-class SHAFI_Op_Setpass extends SHAFI_Op {
-    protected $op = 'setpass';
+class SHAFI_Op_UpdateProfile extends SHAFI_Op {
+    protected $op = 'updateprofile';
     const PERMS=[ 'user' ];
 
     public function _do() {
         global $current_user;
         $this->clear_messages();
 
-        if (isset($_POST['setpass'])) {
-            if ($_POST['password'] == '')
-                return $this->add_error_message(__('No empty passwords are allowed'));
+        if (isset($_POST['updateprofile'])) {
+            if ($_POST['password']??"" !== "") {
+                if ($_POST['password'] !== $_POST['passwordm']??"") 
+                    return $this->add_error_message(__('Passwords do not match'));
 
-            if ($_POST['password'] !== $_POST['passwordm'])
-                return $this->add_error_message(__('Passwords do not match'));
-            global $current_user;
-            if ($current_user->set_password($_POST['password'], true) === null) 
-                return $this->add_error_message(__('Failed to update password'));
+                if ($current_user->set_password($_POST['password'], true) === null) 
+                    return $this->add_error_message(__('Failed to update password'));        
+            } 
+            else 
+                $_POST['password'] = null;
 
-            return $this->add_success_message(__('Password successfully updated'));
+            if ($_POST['removepassword']??"" !== "") {
+                if (! $current_user->set_password(null, true)) 
+                    return $this->add_error_message(__('Failed to remove password'));
+            }
+
+            $current_user->set_field('email', $_POST['email']);
+            if (! $current_user->save_i(['email'])) 
+                return $this->add_error_message(__('Failed to update user'));
+
+            return $this->add_success_message(__('Profile updated successfully'));
         }
     }
 }
@@ -118,6 +128,7 @@ class SHAFI_Op_Users extends SHAFI_Op {
 
             $newuser = new SHAUser();
             $newuser->set_field('username', $_POST['username']);
+            $newuser->set_field('email', $_POST['email']);
             $newuser->set_password($_POST['password'], false);
             $newuser->set_field('permissions', $perm_s);
 
@@ -152,8 +163,9 @@ class SHAFI_Op_Users extends SHAFI_Op {
                 if (! $user->set_password($_POST['password'], true))
                     return $this->add_error_message(__('Failed to update user'));
 
+            $user->set_field('email', $_POST['email']);
             $user->set_field('permissions', $perm_s);
-            if (! $user->save_i(['permissions'])) 
+            if (! $user->save_i(['permissions', 'email'])) 
                 return $this->add_error_message(__('Failed to update user'));
 
             return $this->add_success_message(__('User has been successfully updated'));
@@ -235,19 +247,19 @@ class SHAFI_Op_Google_Auth extends SHAFI_Op_Login {
         if ($current_user->is_logged_in())
             return $this->add_error_message(__("User is already logged in"));
 
-        [ $success, $login ] = $this->google_auth();
+        [ $success, $email ] = $this->google_auth();
 
-        if ($login !== null) {
-            $user = SHAUser::search([ 'username' => $login]);
+        if ($email !== null) {
+            $user = SHAUser::search([ 'email' => $email]);
             if (sizeof($user) !== 1) {
                 session_destroy();
                 $user = new SHAUser();
                 return $this->add_error_message(__("User does not exist"));
             }
             else
-                return $this->_login($login);
+                return $this->_login($user[0]->get_field('username'));
         }
 
-        return $this->add_error_message($login);
+        return $this->add_error_message($email);
     }
 }

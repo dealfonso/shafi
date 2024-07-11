@@ -6,9 +6,7 @@ if ($handler->token_created === null) {
 <div class="col-md-6 offset-md-3 v-center text-center">
         <div class="input-group">
             <input type="text" id="filename" disabled class="form-control" placeholder="<?php _e('Filename') ?>">
-            <div class="input-group-append">
-                <button id="resumable-select-file" resumable-url="<?php echo __UPLOAD_URL ?>" resumable-legacy-url="<?php echo __LEGACY_UPLOAD_URL ?>" class="btn btn-outline-secondary" type="button"><?php _e('Select file') ?></button>
-            </div>
+            <button id="resumable-select-file" resumable-url="<?php echo __UPLOAD_URL ?>" resumable-legacy-url="<?php echo __LEGACY_UPLOAD_URL ?>" class="btn btn-outline-secondary" type="button"><?php _e('Select file') ?></button>
         </div>
         <p>
             <div id="upload-progress" class="progress d-none">
@@ -21,11 +19,9 @@ if ($handler->token_created === null) {
             <div class="collapsible closed" opened-text='<?php _e('simple') ?> <i class="fas fa-angle-up"></i>' closed-text='<?php _e('advanced') ?> <i class="fas fa-angle-down"></i>' >
                 <div class="content">
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text">
-                                <input type="checkbox" name="setpasswd" id="setpasswd">
-                                <span><?php _e('Set password') ?></span>
-                            </div>
+                        <div class="input-group-text">
+                            <input type="checkbox" name="setpasswd" id="setpasswd">
+                            <span><?php _e('Set password') ?></span>
                         </div>
                         <input type="password" class="form-control"  maxlength="255" id="password" name="password" disabled>
                     </div>
