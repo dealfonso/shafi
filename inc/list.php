@@ -79,6 +79,22 @@ class DDN_List {
         return $this->render(); 
     }         
 
+    public function sort($fields, $order = 'asc') {
+        if (!is_array($fields)) $fields = array($fields);
+        usort($this->objects, function($a, $b) use ($fields, $order) {
+            foreach ($fields as $field) {
+                $v1 = $a->get_field($field);
+                $v2 = $b->get_field($field);
+                if ($v1 === null) return -1;
+                if ($v2 === null) return 1;
+                if ($v1 < $v2) return $order === 'asc'?-1:1;
+                if ($v1 > $v2) return $order === 'asc'?1:-1;
+                return 0;
+            }
+            return 0;
+        });
+    }
+
     public function render($classes, $extrahtml='') {
         $n_objects = sizeof($this->objects);
         $i_object = 0;
