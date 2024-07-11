@@ -7,7 +7,10 @@ if ( ! defined( '__SHAFI_FOLDER' ) ) {
 class SHAFI_Op_Get extends SHAFI_Op {
     protected $op = 'get';
     public $needs_password = false;
+    public $correct_password = null;
     public $token_id = null;
+    public $show_info = true;
+    public $file = null;
 
     public function _do() {
         global $current_user;
@@ -66,15 +69,26 @@ class SHAFI_Op_Get extends SHAFI_Op {
         }
 
         // Now password check
+        $this->file = $file;
         $passwd = $token->get_field('password');
         if ($passwd !== null) {
             $this->needs_password = true;
+            $this->correct_password = false;
             if (isset($_POST['download'])) {
-                if (! password_verify($_POST['passwd'], $passwd)) 
+                if (password_verify($_POST['passwd'], $passwd)) {
+                    $this->correct_password = true;
+                } else {
                     return $this->add_error_message(__('Invalid password'));
+                }
             } else
                 return false;
         }
+
+        if ($_GET["d"]??"false" !== "") {
+            return true;
+        }
+
+        $this->show_info = false;
 
         // Store the hit count
         // TODO: store stats?
