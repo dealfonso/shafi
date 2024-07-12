@@ -1,11 +1,14 @@
 # ShaFi: Share your Files
-ShaFi is a platform to share files using self expiring tokens. It offers features similar to WeTransfer, but hosted in your servers thus enabling you to control the limitations. It is similar to [youtransfer](https://github.com/YouTransfer/YouTransfer), but ShaFi implements a backend to allow registered users to have control over their files, to have stats of usage of the sharing links and to create multiple sharing tokens.
+ShaFi is a self-hosted alternative to [WeTransfer](https://wetransfer.com/). It enables to share files using self expiring tokens. It is similar to [youtransfer](https://github.com/YouTransfer/YouTransfer), but ShaFi implements a backend to allow registered users to have control over their files, to have stats of usage of the sharing links and to create multiple sharing tokens.
 
 ShaFI implements two main workflows: 
-- Unregistered sharing (similar to WeTransfer): an unregistered user uploads a file to ShaFi, and ShaFi creates an unique token that will automatically expire in 1 week.
+- Unregistered sharing (similar to WeTransfer): an unregistered user uploads a file to ShaFi, and ShaFi creates an unique token that will automatically expire in 1 week (this value can be configured for your servers).
 - Registered sharing: the registered users can upload files, but they are allowed to manage tokens for these files. It is possible to create multiple tokens for the same file, with different features: expiration dates, expiration hits, using password, etc.
 
-![A file created by a registered user](img/create-file.png)
+| ![Main page](img/main-page.png) | ![Login page](img/login-page.png) | 
+| --- | --- |
+| ![Download a file using a token](img/file-download.png) | ![Password protected files](img/password-protected.png) |
+| ![Creation of tokens](img/token-creation.png) | ![Management of new tokens](img/token-management.png) |
 
 ## Features
 
@@ -256,6 +259,54 @@ Then you can use the keys of the groups to define other limits (e.g. quotas, max
 
 In order to use an external authentication mechanism (e.g. Google or any type of SSO), you can create a custom login class and then login into ShaFi.
 
+#### Example: Google Auth
+
+The authentication using Google is included in SHAFI. It is implemented in the class `SHAFI_Op_Google_Auth`, and there is an example file on how to use it in `google-auth-login.php`.
+
+> To get the Google authentication working, you need to create a project in Google Cloud Console and get the client ID and client secret. Then you need to include them in the `config.php` file, using the definitions `__GOOGLE_CLIENT_ID` and `__GOOGLE_CLIENT_SECRET`.
+
+It works as follows:
+
+1. User is redirected to `/auth-google` web page, which is associated to `SHAFI_Op_Google_Auth`.
+1. Method `google_auth` manages the authentication (redirecting to the appropriate login server, etc.).
+1. Once authenticated the return URL must redirect to `/auth-google` again.
+1. Finally, method `_do` gets the authenticated email and tries to login the user (if the e-mail exists).
+
+This class is included in SHAFI, but the implementation is more or less the next one:
+
+```php
+class SHAFI_Op_Google_Auth extends SHAFI_Op_Login {
+    public function google_auth() {        
+        /** things to authenticate using google but not included here */
+        return [ true, $email ];
+    }
+
+    public function _do() {
+        global $current_user;
+        $this->clear_messages();
+
+        if ($current_user->is_logged_in())
+            return $this->add_error_message(__("User is already logged in"));
+
+        [ $success, $email ] = $this->google_auth();
+
+        if ($email !== null) {
+            $user = SHAUser::search([ 'email' => $email]);
+            if (sizeof($user) !== 1) {
+                session_destroy();
+                $user = new SHAUser();
+                return $this->add_error_message(__("User does not exist"));
+            }
+            else
+                return $this->_login($user[0]->get_field('username'));
+        }
+
+        return $this->add_error_message($email);
+    }
+```
+
+#### Example: Rediris SSO
+
 E.g. Rediris SSO is an external authentication identity, and the following class integrates it with ShaFi as an external identity validation. It works as follows:
 
 1. User is redirected to `/auth` web page, which is associated to `SHAFI_Op_External_Auth`.
@@ -278,6 +329,7 @@ class SHAFI_Op_External_Auth extends SHAFI_Op_Login {
             if (sizeof($user) !== 1) {
                 session_destroy();
                 $user = new SHAUser();
+                return $this->add_error_message(__("User not found"));
             }
             else
                 return $this->_login($login);
@@ -300,9 +352,9 @@ class SHAFI_Op_External_Auth extends SHAFI_Op_Login {
 - It is developed in PHP so it works in most of servers.
 - ShaFi is easy to integrate with different authorization mechanisms (e.g. Google)
 - ShaFi is designed to use different storage backends. At this time it only implements filesystem backend, but S3 is easy to implement.
+- Integrated with Google auth
 
 ### Future features
-- Integrate with Google auth.
 - Use Amazon S3 as a backend for storing files.
 - Allowing multiple files to be uploaded (or downloaded) at once.
 - Add quotas of files or storage space.
