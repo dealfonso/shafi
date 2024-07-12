@@ -75,8 +75,8 @@ function showmodal_renew(v, t) {
 
 <div class="col-md-6 offset-md-3">
     <div class="container text-center">
-        <div class="filedesc">
-            <div class="v-center">
+        <div class="filedesc row">
+            <div class="v-center col">
                 <ul>
                 <li><span class="label"><?php _e('Name') ?>: </span><?php echo $c_file->get_field('name'); ?></li>
                 <li><span class="label"><?php _e('Size') ?>: </span><?php echo human_filesize($c_file->get_field('size')); ?></li>
@@ -85,14 +85,14 @@ function showmodal_renew(v, t) {
                 <li><span class="label"><?php _e('Owner') ?>: </span><?php echo $c_file->get_field('owner'); ?></li>
                 </ul>
             </div>
-            <div class="v-center">
+            <div class="v-center col">
                 <a class='download' href="<?php echo add_query_var(['op' => 'download', 'id' => $c_file->get_id() ], get_root_url()); ?>"><i class="fas fa-file-download"></i></a>
             </div>
         </div>
     </div>
 </div>
 <div class="col-md-12">
-    <div class="container text-center">
+    <div class="container text-center overflow-auto">
         <h3><?php _e('Tokens for the file') ?></h3>
         <?php
         $list = new DDN_List(
@@ -161,13 +161,13 @@ function showmodal_renew(v, t) {
         if ($c_file->is_active()) {
         ?>
         <p>
-        <a href="javascript:showmodal_create()" class="btn btn-info btn-lg" role="button">
+        <a href="javascript:showmodal_create()" class="mt-3 btn btn-info btn-lg" role="button">
             <i class="fas fa-plus"></i> <?php _e('Create token') ?>
         </a>
-        <a href="javascript:showmodal_cancelall()" class="btn btn-warning btn-lg" role="button">
+        <a href="javascript:showmodal_cancelall()" class="mt-3 btn btn-warning btn-lg" role="button">
             <i class="fas fa-trash"></i> <?php _e('Cancel all tokens') ?>
         </a>
-        <a href="javascript:showmodal_cancelfile('<?php echo htmlspecialchars($c_file->get_field('name')); ?>', '<?php echo $c_file->get_id(); ?>', '<?php echo add_query_var(['op' => 'del', 'id' => $c_file->get_id() ], __ADMIN_URL); ?>')" class="btn btn-danger btn-lg" role="button">
+        <a href="javascript:showmodal_cancelfile('<?php echo htmlspecialchars($c_file->get_field('name')); ?>', '<?php echo $c_file->get_id(); ?>', '<?php echo add_query_var(['op' => 'del', 'id' => $c_file->get_id() ], __ADMIN_URL); ?>')" class="mt-3 btn btn-danger btn-lg" role="button">
             <i class="fas fa-trash"></i> <?php _e('Cancel file') ?>
         </a>
         </p>
